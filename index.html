@@ -3,86 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rofik - Create Panel</title>
+    <title>Rofik - Panel Creator</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="kuda.css">
 </head>
 <body>
-    <header class="header">
-        <div class="header-title">
-            <span class="icon fas fa-server"></span>
-            Panel Creator
-        </div>
-        <div class="profile">
-            <div class="info">
-                <div class="name">Rofik</div>
-                <div class="status">
-                    <span class="dot"></span>
-                    <span>Online</span>
+    <div id="app-container" class="hidden">
+        <div id="sidebar" class="sidebar">
+            <div class="profile">
+                <img id="user-profile-pic" src="background.jpg" alt="Profile Picture">
+                <div class="info">
+                    <div id="user-profile-name" class="name">...</div>
+                    <div id="user-profile-role" class="role">User</div>
                 </div>
             </div>
-            <img src="https://files.catbox.moe/dgjhl3.jpg" alt="Profile Picture">
+            <a href="#create-panel" class="menu-item active" data-view="app-view"><span class="icon fas fa-server"></span>Create Panel</a>
+            <a href="#owner-menu" id="owner-menu-btn" class="menu-item hidden" data-view="owner-view"><span class="icon fas fa-crown"></span>Owner Menu</a>
+            <a href="#" id="logout-btn" class="menu-item logout"><span class="icon fas fa-sign-out-alt"></span>Logout</a>
         </div>
-    </header>
+        
+        <div id="backdrop" class="backdrop"></div>
 
-    <main class="main-content">
-        <div id="create-panel" class="content-section active">
-            <div class="panel-creator"> 
-                <h1>Create Free Panel</h1>
-                <p>Buat akun panel hosting gratis di sini.</p>
-                <form id="createPanelForm" class="input-group">
-                    <input type="text" id="panelUsernameInput" placeholder="Masukkan Username Panel Anda" required autocomplete="off">
-                    <input type="password" id="panelPasswordInput" placeholder="Masukkan Password Panel Anda" required autocomplete="off">
-                    <input type="text" id="panelServerNameInput" placeholder="Nama Server (Opsional)" autocomplete="off">
-                    
-                    <select id="panelRamSelect" required>
-                        <option value="" disabled selected>Pilih RAM Server</option>
-                        <option value="1gb">1 GB RAM</option>
-                        <option value="2gb">2 GB RAM</option>
-                        <option value="3gb">3 GB RAM</option>
-                        <option value="4gb">4 GB RAM</option>
-                        <option value="5gb">5 GB RAM</option>
-                        <option value="6gb">6 GB RAM</option>
-                        <option value="7gb">7 GB RAM</option>
-                        <option value="8gb">8 GB RAM</option>
-                        <option value="9gb">9 GB RAM</option>
-                        <option value="10gb">10 GB RAM</option>
-                        <option value="unlimited">Unlimited RAM</option>
-                    </select>
+        <header class="header">
+            <div class="icon hamburger">
+                <span class="fas fa-bars"></span>
+            </div>
+            <div id="header-title" class="header-title">Panel Creator</div>
+        </header>
 
-                    <button id="createPanelBtn" type="submit">Buat Panel</button>
-                </form>
-                <div id="panelResultArea" style="display: none; margin-top: 2rem; text-align: left;">
-                    <div class="result-box">
-                        <h3>â Panel Berhasil Dibuat!</h3>
-                        
-                        <p class="date-info"><strong>Dibuat Pada:</strong> <span id="creationDate"></span></p>
-                        <p class="date-info expires"><strong>Kedaluwarsa Pada:</strong> <span id="expirationDate"></span></p>
+        <main class="main-content">
+            <div id="app-view" class="view">
+                <div class="panel-creator">
+                    <h1>Create Your Panel</h1>
+                    <p id="panel-creator-subtitle">Anda dapat membuat 1 server gratis.</p>
+                    <form id="createPanelForm" class="input-group">
+                        <input type="text" id="panelServerNameInput" placeholder="Nama Server (Opsional)" autocomplete="off">
+                        <select id="panelRamSelect" required>
+                            </select>
+                        <button id="createPanelBtn" type="submit">Buat Panel</button>
+                    </form>
+                    <div id="panelResultArea" class="hidden"></div>
+                    <div id="panelStatusMessage" class="status-message"></div>
+                </div>
+            </div>
 
-                        <p><strong>Username:</strong></p>
-                        <div class="result-with-copy">
-                            <a id="panelUsername" style="user-select: all;"></a>
-                            <button class="copy-btn" onclick="copyResultText('panelUsername')"><i class="fas fa-copy"></i></button>
+            <div id="owner-view" class="view hidden">
+                <div class="owner-container">
+                    <h1><i class="fas fa-tools"></i> Owner Menu</h1>
+                    <div class="owner-section">
+                        <h2><i class="fas fa-users"></i> List All Users</h2>
+                        <div class="table-container">
+                            <table id="user-list-table">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    </tbody>
+                            </table>
                         </div>
-                        <p style="margin-top: 1rem;"><strong>Password:</strong></p>
-                        <div class="result-with-copy">
-                            <a id="panelPassword" style="user-select: all;"></a>
-                            <button class="copy-btn" onclick="copyResultText('panelPassword')"><i class="fas fa-copy"></i></button>
-                        </div>
-                        <p style="margin-top: 1rem;"><strong>Login URL:</strong></p>
-                        <div class="result-with-copy">
-                            <a id="panelLoginUrl" href="#" target="_blank"></a>
-                            <button class="copy-btn" onclick="copyResultUrl('panelLoginUrl')"><i class="fas fa-copy"></i></button>
-                        </div>
-                        <a id="loginToPanelBtn" href="#" target="_blank" class="upload-btn" style="display: block; margin-top: 1.5rem; text-align: center;">Login ke Panel</a>
                     </div>
                 </div>
-                <div id="panelStatusMessage" class="status-message"></div>
             </div>
+        </main>
+    </div>
+
+    <div id="login-view" class="auth-container">
+        <div class="auth-box">
+            <h1>Login</h1>
+            <form id="login-form">
+                <input type="text" id="login-username" placeholder="Username" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p class="switch-form">Belum punya akun? <a href="#" id="show-register">Daftar di sini</a></p>
+            <div id="auth-error" class="error-message"></div>
         </div>
-    </main>
+    </div>
+
+    <div id="register-view" class="auth-container hidden">
+        <div class="auth-box">
+            <h1>Daftar Akun Baru</h1>
+            <form id="register-form">
+                <input type="text" id="register-username" placeholder="Username" required>
+                <input type="password" id="register-password" placeholder="Password (min. 6 karakter)" required>
+                <input type="password" id="register-confirm-password" placeholder="Konfirmasi Password" required>
+                <input type="text" id="register-referral" placeholder="Kode Referal (Opsional)">
+                <button type="submit">Daftar</button>
+            </form>
+            <p class="switch-form">Sudah punya akun? <a href="#" id="show-login">Login di sini</a></p>
+        </div>
+    </div>
+
+    <div id="github-modal" class="auth-container hidden">
+         <div class="auth-box">
+            <h1>Koneksi ke GitHub</h1>
+            <p>Info ini hanya disimpan di browser Anda.</p>
+            <div class="input-group">
+                <input type="password" id="token" placeholder="Personal Access Token (PAT)">
+                <input type="text" id="owner" placeholder="Owner / Username Repo">
+                <input type="text" id="repo" placeholder="Nama Repository">
+            </div>
+            <button id="save-github-config">Simpan & Lanjutkan</button>
+        </div>
+    </div>
     
-    <script src="miyako.js" defer></script>
+    <script src="miyako.js"></script>
 </body>
 </html>
