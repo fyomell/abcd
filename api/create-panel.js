@@ -1,4 +1,4 @@
-// File: /api/create-panel.js (Final Fix)
+// File: /api/create-panel.js (Final Fix Startup Command)
 
 import config from '../config.js'; // Import konfigurasi dari file config.js di root
 
@@ -81,11 +81,11 @@ export default async function handler(req, res) {
                 user: userId,
                 egg: parseInt(egg),
                 docker_image: "ghcr.io/parkervcp/yolks:nodejs_18",
-                startup: "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; /usr/local/bin/node /home/container/{{BOT_JS_FILE}}",
+                startup: `if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == "1" ]]; then git pull; fi; if [[ ! -z \${NODE_PACKAGES} ]]; then /usr/local/bin/npm install \${NODE_PACKAGES}; fi; if [[ ! -z \${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall \${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ ! -z \${CUSTOM_ENVIRONMENT_VARIABLES} ]]; then vars=$(echo \${CUSTOM_ENVIRONMENT_VARIABLES} | tr ";" "\\n"); for line in $vars; do export $line; done fi; /usr/local/bin/\${CMD_RUN};`, // <-- INI YANG DIUBAH
                 environment: {
                     "USER_UPLOAD": "0",
                     "AUTO_UPDATE": "0",
-                    "CMD_RUN": "npm start" // <-- INI DIA FIX-NYA
+                    "CMD_RUN": "npm start"
                 },
                 limits: { memory: ram, swap: 0, disk: disknya, io: 500, cpu: cpu },
                 feature_limits: { databases: 5, backups: 5, allocations: 1 },
