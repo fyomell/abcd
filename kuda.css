@@ -48,23 +48,10 @@ body::-webkit-scrollbar-thumb {
     color: var(--neon-cyan); transition: color 0.3s ease;
 }
 .header .icon:hover { color: var(--text-color); }
-.header .search-container {
-    flex-grow: 1; margin: 0 1rem; position: relative;
-}
-.header .search-container input {
-    width: 100%; padding: 0.75rem 0.75rem 0.75rem 2.5rem;
-    border: 1px solid var(--neon-cyan); border-radius: 2rem;
-    background-color: var(--card-bg); color: var(--text-color);
-    outline: none; box-shadow: 0 0 5px var(--neon-shadow);
-    transition: all 0.3s ease;
-}
-.header .search-container input:focus {
-    box-shadow: 0 0 10px rgba(0, 255, 242, 0.8);
-    border-color: var(--text-color);
-}
-.header .search-container .search-icon {
-    position: absolute; left: 1rem; top: 50%;
-    transform: translateY(-50%); color: var(--neon-cyan);
+.header-title {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 /* --- Sidebar --- */
@@ -117,68 +104,28 @@ body::-webkit-scrollbar-thumb {
     .main-content { margin-left: 280px; }
     .backdrop { display: none !important; }
 }
+
+/* --- Konten --- */
 .main-content { padding: 1rem; }
-.hero-section { text-align: center; padding: 2rem 1rem; margin-bottom: 2rem; }
-.hero-section h1 {
-    font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--neon-cyan);
-    text-shadow: 0 0 15px var(--neon-shadow);
-}
-.hero-section p { font-size: 1rem; color: var(--light-text); margin-bottom: 2rem; }
 .content-section { display: none; }
 .content-section.active { display: block; }
 
-.quick-access-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-}
-.quick-access-card {
-    background: var(--card-bg); padding: 1.5rem; border-radius: 10px;
-    border: 2px solid var(--neon-cyan); display: flex; align-items: center;
-    gap: 1.5rem; text-decoration: none; color: var(--text-color);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); transition: all 0.3s ease;
-}
-.quick-access-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 10px var(--neon-shadow);
-    background-color: var(--light-card-bg); border-color: var(--gold);
-}
-.quick-access-card .icon {
-    font-size: 2.5rem; color: var(--neon-cyan);
-    text-shadow: 0 0 8px var(--neon-shadow); flex-shrink: 0;
-}
-.quick-access-card:hover .icon { color: var(--gold); }
-.quick-access-card .card-text h4 { margin: 0; font-size: 1.2rem; }
-.quick-access-card .card-text small { margin: 0; color: var(--light-text); }
-
-
-/* Downloader & Panel */
-.panel-creator,
-.tiktok-downloader,
-.pinterest-downloader,
-.media-uploader {
+/* --- Panel Creator --- */
+.panel-creator {
     max-width: 600px; margin: 2rem auto; background-color: var(--card-bg);
     padding: 2rem; border-radius: 15px; border: 2px solid var(--neon-cyan);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6); text-align: center;
 }
-.panel-creator h1,
-.tiktok-downloader h1,
-.pinterest-downloader h1,
-.media-uploader h1 {
+.panel-creator h1 {
     color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-shadow);
     margin-bottom: 1rem;
 }
-.panel-creator .input-group,
-.tiktok-downloader .input-group,
-.pinterest-downloader .input-group,
-.media-uploader .upload-area {
+.panel-creator p { color: var(--light-text); }
+.panel-creator .input-group {
     display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;
 }
 .panel-creator .input-group input,
-.panel-creator .input-group select,
-.tiktok-downloader .input-group input,
-.pinterest-downloader .input-group input,
-.media-uploader input[type="file"] + button {
+.panel-creator .input-group select {
     width: 100%; padding: 0.75rem; border-radius: 0.5rem;
     border: 1px solid var(--neon-cyan); background-color: var(--dark-bg);
     color: var(--text-color); outline: none; box-sizing: border-box;
@@ -192,70 +139,18 @@ body::-webkit-scrollbar-thumb {
     background-size: .65rem auto; cursor: pointer;
 }
 .panel-creator .input-group button,
-.tiktok-downloader .input-group button,
-.pinterest-downloader .input-group button,
-.media-uploader .upload-btn {
+.upload-btn {
     width: 100%; padding: 0.75rem 1.5rem; border: none; box-sizing: border-box;
     background-color: var(--neon-cyan); color: var(--btn-text);
     border-radius: 0.5rem; font-weight: bold; cursor: pointer;
+    text-decoration: none;
     transition: all 0.3s ease;
 }
 .panel-creator .input-group button:hover,
-.tiktok-downloader .input-group button:hover,
-.pinterest-downloader .input-group button:hover,
-.media-uploader .upload-btn:hover {
+.upload-btn:hover {
     background-color: #00b8d4;
     box-shadow: 0 0 15px var(--neon-shadow);
 }
-.tiktok-downloader #resultAreaTiktok {
-    display: none; flex-direction: column; gap: 1.5rem;
-    margin-top: 2rem; text-align: left;
-}
-.tiktok-downloader #resultAreaTiktok .video-info {
-    background-color: var(--light-card-bg); padding: 1.5rem;
-    border-radius: 10px; border: 1px solid var(--neon-cyan);
-    box-shadow: 0 0 10px var(--neon-shadow);
-}
-.tiktok-downloader #resultAreaTiktok .video-info h3 {
-    color: var(--neon-cyan); margin-top: 0;
-    text-shadow: 0 0 5px var(--neon-shadow);
-}
-.tiktok-downloader #resultAreaTiktok .video-info p { margin: 0.5rem 0; }
-.tiktok-downloader #resultAreaTiktok .download-links {
-    display: flex; flex-wrap: wrap; justify-content: center;
-    gap: 1rem; margin-top: 1rem;
-}
-.tiktok-downloader #resultAreaTiktok .download-links a {
-    padding: 0.75rem; text-align: center; border-radius: 5px;
-    text-decoration: none; font-weight: bold; cursor: pointer;
-    transition: background-color 0.3s ease; flex-grow: 1;
-    border: none; outline: none;
-}
-.tiktok-downloader #resultAreaTiktok .download-links .btn-video-nowm {
-    background-color: var(--neon-cyan); color: var(--btn-text);
-}
-.tiktok-downloader #resultAreaTiktok .download-links .btn-video-nowm:hover { background-color: #00b8d4; }
-.tiktok-downloader #resultAreaTiktok .download-links .btn-music {
-    background-color: #e91e63; color: #fff;
-}
-.tiktok-downloader #resultAreaTiktok .download-links .btn-music:hover { background-color: #c2185b; }
-
-.media-uploader input[type="file"] { display: none; }
-.media-uploader .custom-file-upload {
-    border: 2px dashed var(--neon-cyan); padding: 2rem;
-    border-radius: 10px; cursor: pointer; transition: background-color 0.3s;
-}
-.media-uploader .custom-file-upload:hover { background-color: var(--light-card-bg); }
-.media-uploader .custom-file-upload span { font-size: 1.1rem; font-weight: bold; }
-.media-uploader .progress-bar-container {
-    width: 100%; height: 10px; background-color: var(--light-card-bg);
-    border-radius: 5px; overflow: hidden; margin-top: 1rem; display: none;
-}
-.media-uploader .progress-bar {
-    height: 100%; width: 0; background-color: var(--neon-cyan);
-    transition: width 0.3s ease;
-}
-
 .result-with-copy {
     display: flex; align-items: center; gap: 0.5rem;
     margin-top: 0.5rem;
