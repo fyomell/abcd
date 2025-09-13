@@ -2,9 +2,6 @@
 const CUSTOM_API_URL = 'https://abcd-chi-umber.vercel.app';
 
 // --- DEKLARASI ELEMEN ---
-const sidebar = document.getElementById('sidebar');
-const backdrop = document.getElementById('backdrop');
-
 const createPanelForm = document.getElementById('createPanelForm');
 const createPanelBtn = document.getElementById('createPanelBtn');
 const panelUsernameInput = document.getElementById('panelUsernameInput');
@@ -13,13 +10,7 @@ const panelRamSelect = document.getElementById('panelRamSelect');
 const panelResultArea = document.getElementById('panelResultArea');
 const panelStatusMessage = document.getElementById('panelStatusMessage');
 
-// --- FUNGSI-FUNGSI ---
-
-function toggleSidebar() {
-    sidebar.classList.toggle('open');
-    backdrop.classList.toggle('active');
-}
-
+// --- FUNGSI HELPER ---
 function copyResultUrl(elementId) {
     const el = document.getElementById(elementId);
     if (el && el.href) navigator.clipboard.writeText(el.href).then(() => alert('URL berhasil disalin!'));
@@ -30,16 +21,7 @@ function copyResultText(elementId) {
     if (el && el.innerText) navigator.clipboard.writeText(el.innerText).then(() => alert('Teks berhasil disalin!'));
 }
 
-// --- EVENT LISTENERS ---
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Otomatis aktifkan konten create-panel saat pertama dibuka
-    document.getElementById('create-panel').classList.add('active');
-});
-
-backdrop.addEventListener('click', toggleSidebar);
-
-// Event listener untuk form create panel
+// --- EVENT LISTENER UTAMA ---
 if (createPanelForm) {
     createPanelForm.addEventListener('submit', async (e) => {
         e.preventDefault();
