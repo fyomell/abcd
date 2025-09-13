@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rofik</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* --- Sistem CSS Variabel untuk Manajemen Warna --- */
+        :root {
+            --dark-bg: #0c0c1e;
+            --card-bg: #1a1a2e;
+            --light-card-bg: #131326;
+            --neon-cyan: #00fff2;
+            --neon-shadow: rgba(0, 255, 242, 0.6);
+            --text-color: #e0e0e0;
+            --light-text: #aaa;
+            --btn-text: #0c0c1e;
+            --gold: #FFD700;
+        }
+
+        /* CSS Umum dan Reset */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top left, var(--card-bg), var(--dark-bg));
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100%;
+        }
+
+        /* Konten utama yang memiliki scrollbar */
+        body {
+            overflow-y: auto;
+        }
+
+        /* --- Custom Scrollbar untuk konten --- */
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+        body::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+        body::-webkit-scrollbar-thumb {
+            background-color: var(--neon-cyan);
+            border-radius: 4px;
+            border: 1px solid var(--card-bg);
+        }
+
+        /* --- Header --- */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--neon-cyan);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .header .icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin: 0 0.5rem;
+            color: var(--neon-cyan);
+            transition: color 0.3s ease;
+        }
+
+        .header .icon:hover {
+            color: var(--text-color);
+        }
+        
+        .header .search-container {
+            flex-grow: 1;
+            margin: 0 1rem;
+            position: relative;
+        }
+
+        .header .search-container input {
+            width: 100%;
+            padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+            border: 1px solid var(--neon-cyan);
+            border-radius: 2rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 255, 242, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .header .search-container input:focus {
+            box-shadow: 0 0 10px rgba(0, 255, 242, 0.8);
+            border-color: var(--text-color);
+        }
+
+        .header .search-container .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neon-cyan);
+        }
+        
+        /* --- Sidebar (Slide-out) --- */
+        .sidebar {
+            height: 100%;
+            width: 280px;
+            position: fixed;
+            z-index: 100;
+            top: 0;
+            left: -280px; /* Default: tersembunyi */
+            background: linear-gradient(180deg, var(--card-bg), var(--dark-bg));
+            padding-top: 1rem;
+            transition: left 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+            max-height: calc(100vh - 50px);
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar .profile {
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar .profile img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 8px rgba(0, 255, 242, 0.5);
+        }
+        
+        .sidebar .profile .info .name {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .sidebar .profile .info .status {
+            color: #4caf50;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar .profile .info .status .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            box-shadow: 0 0 5px #4caf50;
+        }
+
+        .sidebar a {
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            font-size: 1.1rem;
+            color: #818181;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .sidebar a .icon {
+            font-size: 1.25rem;
+            margin-right: 1rem;
+        }
+        
+        .sidebar a:hover, .sidebar a.active {
+            color: var(--btn-text);
+            background-color: var(--neon-cyan);
+            text-shadow: none;
+        }
+        
+        .sidebar a.active {
+            border-left: 4px solid var(--text-color);
+        }
+        
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 90;
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .backdrop.active {
+            display: block;
+        }
+
+        /* --- MEDIA QUERY UNTUK DESKTOP --- */
+        @media (min-width: 760px) {
+            .sidebar {
+                left: 0; /* Sidebar selalu terlihat di desktop */
+            }
+            .header {
+                padding-left: calc(1rem + 280px); /* Geser header agar tidak menimpa sidebar */
+            }
+            .header .icon.hamburger {
+                display: none; /* Sembunyikan hamburger icon */
+            }
+            .main-content {
+                margin-left: 280px; /* Tambahkan margin untuk konten utama */
+            }
+            .backdrop {
+                display: none !important; /* Pastikan overlay tidak muncul */
+            }
+        }
+        
+        /* --- Konten Utama --- */
+        .main-content {
+            padding: 1rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-shadow);
+        }
+
+        .hero-section .version {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-section p {
+            font-size: 1rem;
+            color: var(--light-text);
+            margin-bottom: 2rem;
+        }
+        
+        .home-page.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 70px);
+            text-align: center;
+        }
+        
+        .home-page h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px var(--neon-shadow), 0 0 30px rgba(0, 255, 242, 0.4);
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 0 20px var(--neon-shadow);
+            }
+            100% {
+                transform: scale(1.05);
+                text-shadow: 0 0 30px var(--neon-cyan), 0 0 50px rgba(0, 255, 242, 0.2);
+            }
+        }
+
+        /* --- Hide Sections Initially --- */
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        
+        /* --- Styling Produk MURBAN --- */
+        .product-card {
+            background: linear-gradient(145deg, var(--card-bg), var(--light-card-bg));
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--neon-cyan);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .product-card .product-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-shadow);
+            border-bottom: 2px dashed var(--neon-cyan);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-card .price-section {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .product-card .price-item {
+            background: var(--dark-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--light-text);
+            width: 250px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card .price-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card .price-item.vip {
+            border-color: var(--gold);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .product-card .price-item h3 {
+            font-size: 1.25rem;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .product-card .price-item.vip h3 {
+            color: var(--gold);
+        }
+
+        .product-card .price-item .price {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: var(--neon-cyan);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 8px var(--neon-shadow);
+        }
+
+        .product-card .price-item.vip .price {
+            color: var(--gold);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+        }
+
+        .product-card .benefit-list {
+            text-align: left;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .product-card .benefit-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed var(--light-card-bg);
+            display: flex;
+            align-items: center;
+        }
+
+        .product-card .benefit-list li:last-child {
+            border-bottom: none;
+        }
+
+        .product-card .benefit-list li .fas {
+            color: #4caf50;
+            margin-right: 0.75rem;
+        }
+
+        .contact-order {
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .contact-order h3 {
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 8px var(--neon-shadow);
+            margin-bottom: 1rem;
+        }
+
+        .contact-order p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .contact-order a {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        .contact-order a:hover {
+            color: var(--text-color);
+            text-decoration: underline;
+        }
+
+        .product-card .sales-text {
+            background: var(--light-card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border: 1px solid var(--neon-cyan);
+            text-align: left;
+        }
+
+        .product-card .sales-text h3 {
+            color: var(--neon-cyan);
+            margin-top: 0;
+        }
+        .product-card .sales-text p {
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+        }
+        
+        /* --- Styling Halaman Preset Alight Motion --- */
+        .preset-container {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            padding: 1rem;
+        }
+        
+        .preset-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .preset-card h2 {
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
+            margin: 1rem 0;
+            text-shadow: 0 0 8px var(--neon-shadow);
+        }
+        
+        .preset-card .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 177.77%; /* Rasio 9:16 untuk video vertikal */
+            background-color: #000;
+        }
+
+        .preset-card .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: none;
+        }
+
+        .preset-card .download-section {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .preset-card .download-section p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .preset-card .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--neon-cyan);
+            color: var(--btn-text);
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        .preset-card .download-btn:hover {
+            background-color: #00b8d4;
+            box-shadow: 0 0 15px var(--neon-shadow);
+        }
+        
+        /* --- Styling Halaman Downloader & Panel --- */
+        .tiktok-downloader,
+        .pinterest-downloader {
+            max-width: 600px;
+            margin: 2rem auto;
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+        
+        .tiktok-downloader h1,
+        .pinterest-downloader h1 {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-shadow);
+            margin-bottom: 1rem;
+        }
+        
+        .tiktok-downloader .input-group,
+        .pinterest-downloader .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .tiktok-downloader .input-group input,
+        .pinterest-downloader .input-group input,
+        .tiktok-downloader .input-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--neon-cyan);
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            outline: none;
+            box-shadow: 0 0 5px var(--neon-shadow);
+        }
+
+        .tiktok-downloader .input-group select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2300FFF2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E');
+            background-repeat: no-repeat;
+            background-position: right 0.7rem top 50%;
+            background-size: .65rem auto;
+            cursor: pointer;
+        }
+        
+        .tiktok-downloader .input-group button,
+        .pinterest-downloader .input-group button {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background-color: var(--neon-cyan);
+            color: var(--btn-text);
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tiktok-downloader .input-group button:hover,
+        .pinterest-downloader .input-group button:hover {
+            background-color: #00b8d4;
+            box-shadow: 0 0 15px var(--neon-shadow);
+        }
+        
+        .tiktok-downloader #resultAreaTiktok,
+        .pinterest-downloader #resultAreaPinterest {
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            text-align: left;
+        }
+        
+        .tiktok-downloader #resultAreaTiktok .video-info,
+        .pinterest-downloader #resultAreaPinterest .video-info {
+            background-color: var(--light-card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-shadow);
+        }
+
+        .tiktok-downloader #resultAreaTiktok .video-info h3,
+        .pinterest-downloader #resultAreaPinterest .video-info h3 {
+            color: var(--neon-cyan);
+            margin-top: 0;
+            text-shadow: 0 0 5px var(--neon-shadow);
+        }
+        
+        .tiktok-downloader #resultAreaTiktok .video-info p,
+        .pinterest-downloader #resultAreaPinterest .video-info p {
+            margin: 0.5rem 0;
+        }
+        
+        .tiktok-downloader #resultAreaTiktok .download-links,
+        .pinterest-downloader #resultAreaPinterest .download-links {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .tiktok-downloader #resultAreaTiktok .download-links a,
+        .pinterest-downloader #resultAreaPinterest .download-links a,
+        .tiktok-downloader #resultAreaTiktok .download-links button,
+        .pinterest-downloader #resultAreaPinterest .download-links button {
+            display: block;
+            padding: 0.75rem;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            flex-grow: 1;
+            border: none;
+            outline: none;
+        }
+        
+        @media (max-width: 480px) {
+            .tiktok-downloader #resultAreaTiktok .download-links a,
+            .pinterest-downloader #resultAreaPinterest .download-links a,
+            .tiktok-downloader #resultAreaTiktok .download-links button,
+            .pinterest-downloader #resultAreaPinterest .download-links button {
+                flex-basis: 100%;
+            }
+        }
+        
+        .tiktok-downloader #resultAreaTiktok .download-links .btn-video-nowm,
+        .pinterest-downloader #resultAreaPinterest .download-links .btn-video-nowm {
+            background-color: var(--neon-cyan);
+            color: var(--btn-text);
+        }
+        
+        .tiktok-downloader #resultAreaTiktok .download-links .btn-video-nowm:hover,
+        .pinterest-downloader #resultAreaPinterest .download-links .btn-video-nowm:hover {
+            background-color: #00b8d4;
+        }
+        
+        .tiktok-downloader #resultAreaTiktok .download-links .btn-music {
+            background-color: #e91e63;
+            color: #fff;
+        }
+        
+        .tiktok-downloader #resultAreaTiktok .download-links .btn-music:hover {
+            background-color: #c2185b;
+        }
+
+        .upload-result-box {
+            background-color: var(--light-card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--neon-cyan);
+            margin-top: 1rem;
+        }
+
+        .upload-result-box h4 {
+            color: var(--neon-cyan);
+            margin-top: 0;
+        }
+
+        .upload-result-box a {
+            color: var(--text-color);
+            word-break: break-all;
+            text-decoration: none;
+        }
+        
+        .upload-result-box a:hover {
+            text-decoration: underline;
+            color: var(--neon-cyan);
+        }
+
+        /* --- Styling Media to URL --- */
+        .media-uploader {
+            max-width: 600px;
+            margin: 2rem auto;
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        .media-uploader h1 {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-shadow);
+            margin-bottom: 1rem;
+        }
+
+        .media-uploader .upload-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .media-uploader input[type="file"] {
+            display: none;
+        }
+
+        .media-uploader .custom-file-upload {
+            border: 2px dashed var(--neon-cyan);
+            padding: 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .media-uploader .custom-file-upload:hover {
+            background-color: var(--light-card-bg);
+        }
+        
+        .media-uploader .custom-file-upload span {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .media-uploader .upload-btn {
+            padding: 0.75rem;
+            background-color: var(--neon-cyan);
+            color: var(--btn-text);
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .media-uploader .upload-btn:hover {
+            background-color: #00b8d4;
+            box-shadow: 0 0 15px var(--neon-shadow);
+        }
+        
+        .media-uploader .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background-color: var(--light-card-bg);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .media-uploader .progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: var(--neon-cyan);
+            transition: width 0.3s ease;
+        }
+        
+        .media-uploader #uploadResult, .media-uploader #mediafireUploadResult {
+            margin-top: 2rem;
+            text-align: left;
+            word-wrap: break-word;
+        }
+        
+        .media-uploader #uploadResult .result-box, .media-uploader #mediafireUploadResult .result-box, .result-box {
+            background-color: var(--light-card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--neon-cyan);
+        }
+
+        .media-uploader #uploadResult .result-box a, .media-uploader #mediafireUploadResult .result-box a {
+            color: var(--neon-cyan);
+            word-break: break-all;
+        }
+        
+        .media-uploader .status-message, .status-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: rgba(0, 255, 242, 0.2);
+            color: var(--neon-cyan);
+            text-align: center;
+            display: none;
+        }
+        
+        .result-with-copy {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .result-with-copy a {
+            flex-grow: 1;
+            word-break: break-all;
+            color: var(--neon-cyan);
+            text-decoration: none;
+        }
+
+        .result-with-copy a:hover {
+            text-decoration: underline;
+        }
+        
+        .copy-btn {
+            background-color: var(--neon-cyan);
+            color: var(--btn-text);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .copy-btn:hover {
+            background-color: #00b8d4;
+            box-shadow: 0 0 10px var(--neon-shadow);
+        }
+
+        /* --- Styling Halaman Riwayat --- */
+        #history {
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        #history h1 {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-shadow);
+            margin-bottom: 2rem;
+        }
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .history-item {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .history-item.tiktok {
+            background-color: #e91e631a;
+            border-color: #e91e63;
+        }
+        .history-item.media {
+            background-color: #00fff21a;
+            border-color: #00fff2;
+        }
+        .history-item.mediafire {
+            background-color: #007bff1a;
+            border-color: #007bff;
+        }
+        .history-item.pinterest {
+            background-color: #e600231a;
+            border-color: #e60023;
+        }
+        .history-item.all-sosmed {
+            background-color: #8A2BE21A;
+            border-color: #8A2BE2;
+        }
+        .history-item .item-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .history-item .item-header .type {
+            font-weight: bold;
+            padding: 0.25rem 0.75rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+        .history-item.tiktok .item-header .type {
+            background-color: #e91e63;
+        }
+        .history-item.media .item-header .type {
+            background-color: var(--neon-cyan);
+            color: var(--btn-text);
+        }
+        .history-item.mediafire .item-header .type {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .history-item.pinterest .item-header .type {
+            background-color: #e60023;
+            color: #fff;
+        }
+        .history-item.all-sosmed .item-header .type {
+            background-color: #8A2BE2;
+            color: #fff;
+        }
+        .history-item .item-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .history-item .item-url a {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .history-item .item-url a:hover {
+            text-decoration: underline;
+        }
+        #clearHistoryBtn {
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #clearHistoryBtn:hover {
+            background-color: #d32f2f;
+        }
+        .empty-history {
+            color: var(--light-text);
+            font-style: italic;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-group button {
+            flex-grow: 1;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: var(--card-bg);
+            color: var(--neon-cyan);
+            border: 1px solid var(--neon-cyan);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-group button:hover {
+            background-color: var(--neon-cyan);
+            color: var(--btn-text);
+            box-shadow: 0 0 10px var(--neon-shadow);
+        }
+        .form-container .order-info {
+            background-color: var(--light-card-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--neon-cyan);
+            text-align: left;
+            display: none;
+        }
+        .form-container .order-info h3 {
+            color: var(--neon-cyan);
+            margin: 0 0 0.5rem 0;
+        }
+        
+        /* --- Animasi yang Ditambahkan --- */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0); 
+            }
+        }
+
+        .main-content .content-section.active,
+        .header,
+        .sidebar {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .hero-section h1,
+        .hero-section p,
+        .product-card,
+        .preset-card,
+        .tiktok-downloader,
+        .media-uploader,
+        .pinterest-downloader,
+        .all-sosmed-downloader,
+        #history h1,
+        .history-item {
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        .sidebar a:hover {
+            transform: translateX(10px);
+            background-color: var(--neon-cyan);
+            color: var(--btn-text);
+        }
+
+        .product-card .price-item:hover,
+        .preset-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--neon-shadow);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .header .icon:hover,
+        .download-btn:hover,
+        .upload-btn:hover,
+        #clearHistoryBtn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 5px 20px var(--neon-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .custom-file-upload:hover {
+            transform: translateY(-2px);
+            background-color: var(--light-card-bg);
+            box-shadow: 0 5px 15px var(--neon-shadow);
+        }
+        
+        @keyframes neonFlicker {
+            0%, 100% {
+                text-shadow: 0 0 10px var(--neon-shadow), 0 0 20px var(--neon-shadow), 0 0 30px var(--neon-cyan);
+            }
+            50% {
+                text-shadow: 0 0 5px var(--neon-shadow), 0 0 10px var(--neon-shadow), 0 0 15px var(--neon-cyan);
+            }
+        }
+
+        .hero-section h1,
+        .home-page h1 {
+            animation: neonFlicker 3s infinite alternate, pulse 2s infinite alternate;
+        }
+        
+        #pinterest-downloader #resultAreaPinterest img, #pinterest-downloader #resultAreaPinterest video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        #pinterest-downloader #resultAreaPinterest .download-links {
+            justify-content: center;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--light-card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--neon-cyan);
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 10px var(--neon-shadow);
+        }
+
+        .stat-card .icon {
+            font-size: 2rem;
+            color: var(--neon-cyan);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 5px var(--neon-shadow);
+        }
+
+        .stat-card h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: var(--text-color);
+        }
+
+        .stat-card p {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--neon-cyan);
+            font-family: 'Share Tech Mono', monospace;
+            text-shadow: 0 0 8px var(--neon-shadow);
+        }
+
+        .quick-access-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .quick-access-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid var(--neon-cyan);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            text-decoration: none;
+            color: var(--text-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .quick-access-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 10px var(--neon-shadow);
+            background-color: var(--light-card-bg);
+            border-color: var(--gold);
+        }
+
+        .quick-access-card .icon {
+            font-size: 2.5rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 8px var(--neon-shadow);
+            flex-shrink: 0;
+        }
+        .quick-access-card:hover .icon {
+            color: var(--gold);
+        }
+
+        .quick-access-card .card-text h4 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .quick-access-card .card-text small {
+            margin: 0;
+            color: var(--light-text);
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar" class="sidebar">
+        <div class="profile">
+            <img src="https://via.placeholder.com/150" alt="Profile Picture">
+            <div class="info">
+                <div class="name">Rofik</div>
+                <div class="status">
+                    <span class="dot"></span>
+                    <span>Online</span>
+                </div>
+            </div>
+        </div>
+        <a href="#beranda" class="menu-item active"><span class="icon fas fa-home"></span>Beranda</a>
+        <a href="#payment" class="menu-item"><span class="icon fas fa-money-bill-wave"></span>Payment</a>
+        <a href="#produk" class="menu-item"><span class="icon fas fa-shopping-cart"></span>Produk</a>
+        <a href="#sc-bot" class="menu-item"><span class="icon fas fa-code"></span>SC Bot Tele Free</a>
+        <a href="#alight-motion-preset" class="menu-item"><span class="icon fas fa-film"></span>Preset Alight Motion</a>
+        <a href="#tiktok-downloader" class="menu-item"><span class="icon fab fa-tiktok"></span>TikTok Downloader</a>
+        <a href="#pinterest-downloader" class="menu-item"><span class="icon fab fa-pinterest"></span>Pinterest Downloader</a>
+        <a href="#media-to-url" class="menu-item"><span class="icon fas fa-link"></span>Media to URL</a>
+        <a href="#create-panel" class="menu-item"><span class="icon fas fa-server"></span>Create Panel</a>
+        <a href="#history" class="menu-item"><span class="icon fas fa-history"></span>Riwayat</a>
+    </div>
+    
+    <div id="backdrop" class="backdrop"></div>
+
+    <header class="header">
+        <div class="icon hamburger" onclick="toggleSidebar()">
+            <span class="fas fa-bars"></span>
+        </div>
+        <div class="search-container">
+            <span class="search-icon fas fa-search"></span>
+            <input id="searchInput" type="text" placeholder="Cari..." />
+        </div>
+        <div class="icon">
+            <span class="fas fa-bell"></span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        
+        <div id="beranda" class="content-section active">
+            <div class="hero-section" style="text-align: left;">
+                <h1 class="title-main" style="text-align: center;">Selamat Datang di Rofik Tools!</h1>
+                <p style="text-align: center; color: var(--light-text); font-style: italic;">
+                    Semua kebutuhan digitalmu ada di sini.
+                </p>
+            </div>
+        
+            <div class="quick-access-container">
+                <a href="#alight-motion-preset" class="quick-access-card">
+                    <span class="icon fas fa-film"></span>
+                    <div class="card-text">
+                        <h4>Preset Alight Motion</h4>
+                        <small>Download preset keren.</small>
+                    </div>
+                </a>
+                <a href="#tiktok-downloader" class="quick-access-card">
+                    <span class="icon fab fa-tiktok"></span>
+                    <div class="card-text">
+                        <h4>TikTok Downloader</h4>
+                        <small>Unduh video tanpa watermark.</small>
+                    </div>
+                </a>
+                <a href="#media-to-url" class="quick-access-card">
+                    <span class="icon fas fa-link"></span>
+                    <div class="card-text">
+                        <h4>Media to URL</h4>
+                        <small>Upload media dan dapatkan link.</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div id="payment" class="content-section">
+            <div class="hero-section">
+                <h1 class="title-main">Payment</h1>
+                <div class="version">v1.0</div>
+                <p>✨ Halaman ini akan berisi informasi tentang metode pembayaran yang tersedia.</p>
+                <a href="https://t.me/rofikos" class="btn-github">
+                    <span class="fab fa-telegram"></span> Hubungi Admin
+                </a>
+            </div>
+        </div>
+
+        <div id="produk" class="content-section">
+            <div class="product-card">
+                <div class="product-title">╔━━━[ ??𝐏𝐄𝐍 𝐌𝐔𝐑𝐁𝐀𝐍/𝐉𝐀𝐒𝐀 𝐁𝐀𝐍 ]━━━╗</div>
+
+                <div class="price-section">
+                    <div class="price-item">
+                        <h3>MURBAN BIASA</h3>
+                        <div class="price">10K</div>
+                        <ul class="benefit-list">
+                            <li><i class="fas fa-check-circle"></i> FREE APK CEK BAN</li>
+                            <li><i class="fas fa-check-circle"></i> FREE REMAME APK CEK BAN 1X</li>
+                            <li><i class="fas fa-check-circle"></i> UPDATE MT SELALU</li>
+                            <li><i class="fas fa-check-circle"></i> FULL TUTOR VID</li>
+                            <li><i class="fas fa-check-circle"></i> DI AJARI SAMPAI BISA BAN</li>
+                            <li><i class="fas fa-check-circle"></i> BISA OPEN JASA BAN</li>
+                            <li><i class="fas fa-check-circle"></i> FREE APK CEK OPSI</li>
+                            <li><i class="fas fa-check-circle"></i> FREE APK FC WHATSAPP ORI</li>
+                            <li><i class="fas fa-check-circle"></i> FREE APK FC WHATSAPP BISNIS</li>
+                        </ul>
+                    </div>
+                    <div class="price-item vip">
+                        <h3>MURBAN VIP</h3>
+                        <div class="price">15K</div>
+                        <ul class="benefit-list">
+                            <li><i class="fas fa-check-circle"></i> DAPAT ALL BENEFIT MURBAN BIASA</li>
+                            <li><i class="fas fa-check-circle"></i> FREE MT SPAM TO BATU</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="sales-text">
+                    <h3>LIST JASA BAN</h3>
+                    <p>➢ 1 NOMOR : 5K (TINJAU/SPAM)</p>
+                    <p>➢ 1 NOMOR : 7K (BATU)</p>
+                    <br>
+                    <h3>SALE TEKS TINJAU TO BATU</h3>
+                    <p>➢ 10K</p>
+                </div>
+                
+                <div class="contact-order">
+                    <h3>MINAT?ORDER SEKARANG HUBUNGI NOMOR YANG TERSEDIA DI BAWAH</h3>
+                    <p>WHATSAPP: TIDAK TERSEDIA</p>
+                    <p>TELEGRAM: <a href="https.me/rofikos">@rofikos</a> | JIKA SLOW RESS PV TELE KEDUA SAYA</p>
+                    <p>TELEGRAM: <a href="https://t.me/kipasambon">@kipasambon</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="sc-bot" class="content-section">
+            <div class="hero-section">
+                <h1 class="title-main">SC Bot Tele Free</h1>
+                <div class="version">v1.0</div>
+                <p>✨ Halaman ini akan berisi daftar dan deskripsi SC bot Telegram gratis.</p>
+                <a href="https://t.me/rofikos" class="btn-github">
+                    <span class="fab fa-telegram"></span> Hubungi Admin
+                </a>
+            </div>
+        </div>
+
+        
+        <div id="alight-motion-preset" class="content-section">
+            <div class="hero-section">
+                <h1 class="title-main">Kumpulan Preset Alight Motion</h1>
+                <div class="version">v1.0</div>
+                <p>✨ Di sini kamu bisa download preset Alight Motion favoritmu, lengkap dengan video contohnya.</p>
+            </div>
+            
+            <div class="preset-container">
+            </div>
+        </div>
+
+        <div id="tiktok-downloader" class="content-section">
+            <div class="tiktok-downloader">
+                <h1>TikTok Downloader</h1>
+                <p>Download video atau musik dari TikTok tanpa watermark.</p>
+                <div class="input-group">
+                    <input type="text" id="tiktokUrlInput" placeholder="Masukkan link video TikTok..." autocomplete="off">
+                    <button id="downloadTiktokBtn">Download</button>
+                </div>
+
+                <div id="resultAreaTiktok">
+                    <video id="tiktokVideoPlayer" controls style="width: 100%; max-width: 400px; border-radius: 10px; margin: 0 auto; display: block;"></video>
+                    
+                    <div class="video-info">
+                        <h3>Informasi Video</h3>
+                        <p><strong>Judul:</strong> <span id="videoTitle"></span></p>
+                        <p><strong>Author:</strong> <span id="videoAuthor"></span></p>
+                        <p><strong>Jumlah Likes:</strong> <span id="videoLikes"></span></p>
+                        <p><strong>Jumlah Views:</strong> <span id="videoViews"></span></p>
+                        <p><strong>Jumlah Komentar:</strong> <span id="videoComments"></span></p>
+                    </div>
+
+                    <div class="download-links">
+                        <a id="btnVideoNowm" class="download-btn btn-video-nowm" href="#" download>Download Video Tanpa Watermark</a>
+                        <a id="btnMusic" class="download-btn btn-music" href="#" download>Download Musik/Audio</a>
+                        <button id="btnUploadToCatbox" class="download-btn btn-video-nowm" style="background-color:#f44336; color:white; display: none;">
+                            <i class="fas fa-upload"></i> Upload Video ke Catbox
+                        </button>
+                    </div>
+
+                    <div id="uploadResultBox" class="upload-result-box" style="display: none;">
+                        <h4>URL Catbox Berhasil Dibuat</h4>
+                        <div class="result-with-copy">
+                            <a id="catboxUrlResult" href="#" target="_blank"></a>
+                            <button class="copy-btn" onclick="copyResultUrl('catboxUrlResult')"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tiktokStatusMessage" class="status-message"></div>
+            </div>
+        </div>
+        
+        <div id="pinterest-downloader" class="content-section">
+            <div class="pinterest-downloader">
+                <h1>Pinterest Downloader</h1>
+                <p>Download video atau gambar dari Pinterest.</p>
+                <div class="input-group">
+                    <input type="text" id="pinterestUrlInput" placeholder="Masukkan link video atau gambar Pinterest..." autocomplete="off">
+                    <button id="downloadPinterestBtn">Download</button>
+                </div>
+                
+                <div id="resultAreaPinterest">
+                    <div class="media-container" style="text-align: center;">
+                        <img id="pinterestMediaImg" style="width: 100%; max-width: 400px; border-radius: 10px; margin: 0 auto; display: block;">
+                        <video id="pinterestMediaVideo" controls style="width: 100%; max-width: 400px; border-radius: 10px; margin: 0 auto; display: block;"></video>
+                    </div>
+                    
+                    <div class="video-info">
+                        <h3>Informasi Konten</h3>
+                        <p><strong>Judul:</strong> <span id="pinterestTitle"></span></p>
+                    </div>
+                    
+                    <div class="download-links">
+                        <a id="btnDownloadPinterest" class="download-btn btn-video-nowm" href="#" download target="_blank">
+                            Download <span id="downloadType"></span>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="pinterestStatusMessage" class="status-message"></div>
+            </div>
+        </div>
+        <div id="media-to-url" class="content-section">
+            <div class="media-uploader">
+                <h1>Media to URL</h1>
+                <p>Upload file media (video/foto) kamu dan dapatkan URL permanen.</p>
+                <form id="uploadForm" class="upload-area">
+                    <label for="mediaFile" class="custom-file-upload">
+                        <span id="fileName">Pilih File Media</span>
+                        <br><br>
+                        <small>Ukuran maksimal 200MB</small>
+                    </label>
+                    <input type="file" id="mediaFile" name="media" accept="image/*,video/*">
+                    <button type="submit" id="uploadBtn" class="upload-btn">Upload</button>
+                </form>
+                <div class="progress-bar-container">
+                    <div class="progress-bar"></div>
+                </div>
+                <div id="uploadStatusMessage" class="status-message"></div>
+                
+                <div id="uploadResult" style="display:none;">
+                    <div class="result-box">
+                        <h3>URL Berhasil Dibuat</h3>
+                        <div class="result-with-copy">
+                            <a id="uploadedUrlResult" href="#" target="_blank"></a>
+                            <button class="copy-btn" onclick="copyResultUrl('uploadedUrlResult')"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="create-panel" class="content-section">
+            <div class="tiktok-downloader"> <h1>Create Free Panel</h1>
+                <p>Buat akun panel hosting gratis di sini.</p>
+                <form id="createPanelForm" class="input-group">
+                    <input type="text" id="panelUsernameInput" placeholder="Masukkan Username Panel Anda" required autocomplete="off">
+                    <input type="password" id="panelPasswordInput" placeholder="Masukkan Password Panel Anda" required autocomplete="off">
+                    <select id="panelRamSelect" required>
+                        <option value="" disabled selected>Pilih RAM Server</option>
+                        <option value="1gb">1 GB RAM</option>
+                        <option value="2gb">2 GB RAM</option>
+                        <option value="3gb">3 GB RAM</option>
+                        <option value="4gb">4 GB RAM</option>
+                        <option value="5gb">5 GB RAM</option>
+                        <option value="6gb">6 GB RAM</option>
+                        <option value="7gb">7 GB RAM</option>
+                        <option value="8gb">8 GB RAM</option>
+                        <option value="9gb">9 GB RAM</option>
+                        <option value="10gb">10 GB RAM</option>
+                        <option value="unlimited">Unlimited RAM</option>
+                    </select>
+                    <button id="createPanelBtn" type="submit">Buat Panel</button>
+                </form>
+    
+                <div id="panelResultArea" style="display: none; margin-top: 2rem; text-align: left;">
+                    <div class="result-box">
+                        <h3>✅ Panel Berhasil Dibuat!</h3>
+                        <p><strong>Login URL:</strong> <a id="panelLoginUrl" href="#" target="_blank"></a></p>
+                        
+                        <p><strong>Username:</strong></p>
+                        <div class="result-with-copy">
+                            <a id="panelUsername" style="color: var(--text-color); user-select: all;"></a>
+                            <button class="copy-btn" onclick="copyResultText('panelUsername')"><i class="fas fa-copy"></i></button>
+                        </div>
+    
+                        <p style="margin-top: 1rem;"><strong>Password:</strong></p>
+                        <div class="result-with-copy">
+                            <a id="panelPassword" style="color: var(--text-color); user-select: all;"></a>
+                            <button class="copy-btn" onclick="copyResultText('panelPassword')"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+    
+                <div id="panelStatusMessage" class="status-message"></div>
+            </div>
+        </div>
+        
+        <div id="history" class="content-section">
+            <h1>Riwayat</h1>
+            <p id="emptyHistoryMessage" class="empty-history">Riwayat masih kosong.</p>
+            <ul id="historyList" class="history-list">
+            </ul>
+            <button id="clearHistoryBtn" style="display: none;">Hapus Semua Riwayat</button>
+        </div>
+    </main>
+    
+    <script>
+        const CUSTOM_API_URL = 'https://abcdp-kappa.vercel.app';
+
+        let lastTiktokVideoUrl = '';
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('backdrop');
+            sidebar.classList.toggle('open');
+            backdrop.classList.toggle('active');
+        }
+        
+        document.getElementById('backdrop').addEventListener('click', toggleSidebar);
+        
+        function showContent(targetId, placeholderText) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+              targetSection.classList.add('active');
+            }
+
+            if (targetId !== 'beranda') {
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            document.getElementById('searchInput').placeholder = placeholderText;
+
+            const menuItems = document.querySelectorAll('.sidebar .menu-item');
+            menuItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === '#' + targetId) {
+                    item.classList.add('active');
+                }
+            });
+        }
+        
+        document.querySelectorAll('.sidebar .menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                let placeholderText = 'Cari...';
+                if (targetId === 'produk') {
+                    placeholderText = 'Cari produk...';
+                } else if (targetId === 'alight-motion-preset') {
+                    placeholderText = 'Cari preset...';
+                    loadPresets();
+                } else if (targetId === 'tiktok-downloader') {
+                    placeholderText = 'Cari...';
+                } else if (targetId === 'video-to-url') {
+                    placeholderText = 'Cari...';
+                }
+                showContent(targetId, placeholderText);
+                
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showContent('beranda', 'Cari...');
+            if (window.location.hash) {
+              showContent(window.location.hash.substring(1), 'Cari...');
+            }
+        });
+        
+        // --- Preset Alight Motion Functions ---
+        async function loadPresets() {
+            const presetContainer = document.querySelector('.preset-container');
+            if (!presetContainer) return;
+            presetContainer.innerHTML = '<p style="text-align: center; color: var(--neon-cyan);">Memuat preset...</p>';
+            const API_URL = `${CUSTOM_API_URL}/api/presets`; 
+
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const presets = await response.json();
+                presetContainer.innerHTML = '';
+
+                if (presets.length === 0) {
+                    presetContainer.innerHTML = '<p style="text-align: center; color: var(--light-text);">Tidak ada preset yang tersedia.</p>';
+                    return;
+                }
+                presets.forEach(preset => {
+                    const presetCard = document.createElement('div');
+                    presetCard.className = 'preset-card';
+                    const downloadButtons = [];
+                    if (preset.download_url_alight) {
+                        downloadButtons.push(`<a href="${preset.download_url_alight}" target="_blank" class="download-btn">Download 5MB</a>`);
+                    }
+                    if (preset.download_url_xml) {
+                        downloadButtons.push(`<a href="${preset.download_url_xml}" target="_blank" class="download-btn">Download XML</a>`);
+                    }
+                    presetCard.innerHTML = `
+                        <h2>${preset.title}</h2>
+                        <div class="video-wrapper">
+                            <video src="${preset.video_url}" controls preload="none" poster="${preset.video_url}"></video>
+                        </div>
+                        <div class="download-section">
+                            <p>${preset.description}</p>
+                            ${downloadButtons.join('')}
+                        </div>
+                    `;
+                    presetContainer.appendChild(presetCard);
+                });
+            } catch (error) {
+                console.error('Gagal memuat preset:', error);
+                presetContainer.innerHTML = `<p style="text-align: center; color: #f44336;">Gagal memuat daftar preset.</p>`;
+            }
+        }
+        
+        // --- LOGIKA TIKTOK DOWNLOADER ---
+        // ... (Kode TikTok, Pinterest, dan Media to URL tetap sama) ...
+        const downloadTiktokBtn = document.getElementById('downloadTiktokBtn');
+        const tiktokUrlInput = document.getElementById('tiktokUrlInput');
+        const tiktokResultArea = document.getElementById('resultAreaTiktok');
+        const tiktokVideoPlayer = document.getElementById('tiktokVideoPlayer');
+        const tiktokVideoTitle = document.getElementById('videoTitle');
+        const tiktokVideoAuthor = document.getElementById('videoAuthor');
+        const tiktokVideoLikes = document.getElementById('videoLikes');
+        const tiktokVideoViews = document.getElementById('videoViews');
+        const tiktokVideoComments = document.getElementById('videoComments');
+        const btnVideoNowm = document.getElementById('btnVideoNowm');
+        const btnMusic = document.getElementById('btnMusic');
+        const btnUploadToCatbox = document.getElementById('btnUploadToCatbox');
+        const tiktokStatusMessage = document.getElementById('tiktokStatusMessage');
+        const uploadResultBox = document.getElementById('uploadResultBox');
+        const catboxUrlResult = document.getElementById('catboxUrlResult');
+
+        if (downloadTiktokBtn) {
+            downloadTiktokBtn.addEventListener('click', async () => {
+                const url = tiktokUrlInput.value.trim();
+                if (!url) {
+                    alert('Silakan masukkan URL video TikTok.');
+                    return;
+                }
+                tiktokStatusMessage.style.display = 'block';
+                tiktokStatusMessage.style.backgroundColor = 'rgba(0, 255, 242, 0.2)';
+                tiktokStatusMessage.style.color = 'var(--neon-cyan)';
+                tiktokStatusMessage.innerText = 'Sedang memproses, mohon tunggu...';
+                downloadTiktokBtn.disabled = true;
+                tiktokResultArea.style.display = 'none';
+                uploadResultBox.style.display = 'none';
+                lastTiktokVideoUrl = '';
+                document.getElementById('btnUploadToCatbox').style.display = 'none';
+                try {
+                    const response = await fetch(`${CUSTOM_API_URL}/api/download-tiktok?url=${encodeURIComponent(url)}`);
+                    const data = await response.json();
+                    if (response.ok && data.status === 'success' && data.data) {
+                        const tiktokData = data.data;
+                        tiktokResultArea.style.display = 'flex';
+                        const videoUrl = data.data.play;
+                        const musicUrl = data.data.music;
+                        tiktokVideoPlayer.src = videoUrl;
+                        tiktokVideoTitle.innerText = tiktokData.title || 'Tidak ada judul';
+                        tiktokVideoAuthor.innerText = tiktokData.author?.nickname || 'Tidak diketahui';
+                        tiktokVideoViews.innerText = (tiktokData.play_count || 0).toLocaleString('id-ID');
+                        tiktokVideoLikes.innerText = (tiktokData.digg_count || 0).toLocaleString('id-ID');
+                        tiktokVideoComments.innerText = (tiktokData.comment_count || 0).toLocaleString('id-ID');
+                        btnVideoNowm.href = videoUrl;
+                        btnVideoNowm.style.display = tiktokData.play ? 'block' : 'none';
+                        btnMusic.href = musicUrl;
+                        btnMusic.style.display = tiktokData.music ? 'block' : 'none';
+                        lastTiktokVideoUrl = videoUrl;
+                        btnUploadToCatbox.style.display = tiktokData.play ? 'block' : 'none';
+                        tiktokStatusMessage.style.display = 'none';
+                        saveToHistory({ type: 'tiktok', title: tiktokData.title || 'Video TikTok', url: videoUrl, author: tiktokData.author?.nickname || 'Tidak diketahui' });
+                    } else {
+                        tiktokStatusMessage.style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
+                        tiktokStatusMessage.style.color = '#f44336';
+                        tiktokStatusMessage.innerText = `❌ Gagal: ${data.message || 'Terjadi kesalahan tidak diketahui.'}`;
+                        lastTiktokVideoUrl = '';
+                        btnUploadToCatbox.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('Download Error:', error);
+                    tiktokStatusMessage.style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
+                    tiktokStatusMessage.style.color = '#f44336';
+                    tiktokStatusMessage.innerText = '❌ Terjadi kesalahan saat menghubungi API.';
+                    lastTiktokVideoUrl = '';
+                    btnUploadToCatbox.style.display = 'none';
+                } finally {
+                    downloadTiktokBtn.disabled = false;
+                }
+            });
+        }
+        
+        // --- LOGIKA PINTEREST DOWNLOADER ---
+        // ... (Kode Pinterest dan yang lainnya tetap sama) ...
+        
+        // --- LOGIKA CREATE PANEL (FIXED) ---
+        const createPanelForm = document.getElementById('createPanelForm');
+        const createPanelBtn = document.getElementById('createPanelBtn');
+        const panelUsernameInput = document.getElementById('panelUsernameInput');
+        const panelPasswordInput = document.getElementById('panelPasswordInput');
+        const panelRamSelect = document.getElementById('panelRamSelect');
+        const panelResultArea = document.getElementById('panelResultArea');
+        const panelStatusMessage = document.getElementById('panelStatusMessage');
+
+        if (createPanelForm) {
+            createPanelForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const username = panelUsernameInput.value.trim();
+                const password = panelPasswordInput.value.trim();
+                const ram = panelRamSelect.value;
+
+                if (!username || !password || !ram) {
+                    alert('Harap isi semua kolom: Username, Password, dan RAM.');
+                    return;
+                }
+
+                panelStatusMessage.style.display = 'block';
+                panelStatusMessage.style.backgroundColor = 'rgba(0, 255, 242, 0.2)';
+                panelStatusMessage.style.color = 'var(--neon-cyan)';
+                panelStatusMessage.innerText = 'Sedang membuat panel, mohon tunggu... Ini mungkin memakan waktu beberapa saat.';
+                createPanelBtn.disabled = true;
+                createPanelBtn.innerText = 'Memproses...';
+                panelResultArea.style.display = 'none';
+
+                try {
+                    const response = await fetch(`${CUSTOM_API_URL}/api/create-panel`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username, password, ram })
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Terjadi kesalahan di server.');
+                    }
+
+                    document.getElementById('panelLoginUrl').href = data.domain;
+                    document.getElementById('panelLoginUrl').innerText = data.domain;
+                    document.getElementById('panelUsername').innerText = data.username;
+                    document.getElementById('panelPassword').innerText = data.password;
+
+                    panelResultArea.style.display = 'block';
+                    panelStatusMessage.style.display = 'none';
+
+                } catch (error) {
+                    console.error('Panel Creation Error:', error);
+                    panelStatusMessage.style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
+                    panelStatusMessage.style.color = '#f44336';
+                    panelStatusMessage.innerText = `❌ Gagal: ${error.message}`;
+                } finally {
+                    createPanelBtn.disabled = false;
+                    createPanelBtn.innerText = 'Buat Panel';
+                }
+            });
+        }
+        
+        // --- FUNGSI HELPER UNTUK SALIN/COPY ---
+        function copyResultUrl(elementId) {
+            const urlElement = document.getElementById(elementId);
+            if (urlElement && urlElement.href) {
+                navigator.clipboard.writeText(urlElement.href).then(() => {
+                    alert('URL berhasil disalin!');
+                });
+            }
+        }
+        
+        function copyResultText(elementId) {
+            const textElement = document.getElementById(elementId);
+            if (textElement && textElement.innerText) {
+                navigator.clipboard.writeText(textElement.innerText).then(() => {
+                    alert('Teks berhasil disalin!');
+                });
+            }
+        }
+
+        // --- LOGIKA RIWAYAT ---
+        const HISTORY_KEY = 'rofik_history';
+        const historyList = document.getElementById('historyList');
+        const emptyHistoryMessage = document.getElementById('emptyHistoryMessage');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        
+        function saveToHistory(item) {
+            let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+            item.id = Date.now();
+            item.date = new Date().toLocaleString('id-ID');
+            history.unshift(item); 
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+            loadHistory();
+        }
+        
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+            historyList.innerHTML = ''; 
+            if (history.length === 0) {
+                emptyHistoryMessage.style.display = 'block';
+                clearHistoryBtn.style.display = 'none';
+            } else {
+                emptyHistoryMessage.style.display = 'none';
+                clearHistoryBtn.style.display = 'block';
+                history.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = `history-item ${item.type}`;
+                    listItem.innerHTML = `
+                        <div class="item-header">
+                            <span class="type">${item.type.charAt(0).toUpperCase() + item.type.slice(1)}</span>
+                            <span class="date">${item.date}</span>
+                        </div>
+                        <div class="item-title">${item.title}</div>
+                        <div class="item-url">
+                            <a href="${item.url}" target="_blank">${item.url}</a>
+                        </div>
+                    `;
+                    historyList.appendChild(listItem);
+                });
+            }
+        }
+        
+        if (clearHistoryBtn) {
+            clearHistoryBtn.addEventListener('click', () => {
+                if (confirm('Apakah kamu yakin ingin menghapus semua riwayat?')) {
+                    localStorage.removeItem(HISTORY_KEY);
+                    loadHistory();
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadHistory);
+        
+    </script>
+</body>
+</html>
