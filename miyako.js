@@ -49,6 +49,24 @@ if (createPanelForm) {
             const data = await response.json();
             if (!response.ok) throw new Error(data.message || 'Terjadi kesalahan di server.');
 
+            // --- LOGIKA BARU: MENGHITUNG TANGGAL KEDALUWARSA ---
+            const now = new Date();
+            const expiration = new Date();
+            expiration.setDate(now.getDate() + 2); // Tambah 2 hari
+
+            const dateOptions = {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+            };
+
+            // Format tanggal ke dalam string Bahasa Indonesia
+            const creationDateString = now.toLocaleString('id-ID', dateOptions);
+            const expirationDateString = expiration.toLocaleString('id-ID', dateOptions);
+
+            // Update elemen-elemen di HTML
+            document.getElementById('creationDate').innerText = creationDateString;
+            document.getElementById('expirationDate').innerText = expirationDateString;
+            
             document.getElementById('panelLoginUrl').href = data.domain;
             document.getElementById('panelLoginUrl').innerText = data.domain;
             document.getElementById('loginToPanelBtn').href = data.domain;
