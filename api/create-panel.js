@@ -1,4 +1,4 @@
-// File: /api/create-panel.js (Versi Config.js)
+// File: /api/create-panel.js (Versi Full Fix dengan Pengecekan Error Lengkap)
 
 import config from '../../config.js'; // Import konfigurasi dari file config.js di root
 
@@ -40,7 +40,9 @@ export default async function handler(req, res) {
 
         const email = username + "@rofik.tools";
 
-        // 1. Buat User di Pterodactyl
+        // ========================================================================
+        // LANGKAH 1: Buat User di Pterodactyl
+        // ========================================================================
         const userResponse = await fetch(`${domain}/api/application/users`, {
             method: 'POST',
             headers: {
@@ -58,15 +60,24 @@ export default async function handler(req, res) {
             })
         });
 
+        // KODE FIX: Cek response sebelum mencoba parse JSON
+        if (!userResponse.ok) {
+            const errorText = await userResponse.text();
+            console.error("RAW ERROR DARI PANEL (SAAT BUAT USER):", errorText);
+            return res.status(500).json({ message: `Panel Pterodactyl error saat membuat user. Cek log di Vercel untuk detailnya.` });
+        }
+
         const userData = await userResponse.json();
         if (userData.errors) {
-            console.error('Pterodactyl User Error:', userData.errors);
+            console.error('Pterodactyl User Error (JSON):', userData.errors);
             return res.status(500).json({ message: `Gagal membuat user: ${userData.errors[0].detail}` });
         }
 
         const userId = userData.attributes.id;
 
-        // 2. Buat Server untuk User tersebut
+        // ========================================================================
+        // LANGKAH 2: Buat Server untuk User tersebut
+        // ========================================================================
         const serverResponse = await fetch(`${domain}/api/application/servers`, {
             method: 'POST',
             headers: {
@@ -87,13 +98,20 @@ export default async function handler(req, res) {
             })
         });
 
+        // KODE FIX: Cek response sebelum mencoba parse JSON
+        if (!serverResponse.ok) {
+            const errorText = await serverResponse.text();
+            console.error("RAW ERROR DARI PANEL (SAAT BUAT SERVER):", errorText);
+            return res.status(500).json({ message: `Panel Pterodactyl error saat membuat server. Cek log di Vercel untuk detailnya.` });
+        }
+
         const serverData = await serverResponse.json();
         if (serverData.errors) {
-            console.error('Pterodactyl Server Error:', serverData.errors);
+            console.error('Pterodactyl Server Error (JSON):', serverData.errors);
             return res.status(500).json({ message: `Gagal membuat server: ${serverData.errors[0].detail}` });
         }
         
-        // Kirim kembali detail akun ke frontend
+        // Jika semuanya berhasil, kirim kembali detail akun ke frontend
         res.status(200).json({
             success: true,
             username: userData.attributes.username,
@@ -103,7 +121,7 @@ export default async function handler(req, res) {
         });
 
     } catch (error) {
-        console.error('API Error:', error);
-        res.status(500).json({ message: 'Terjadi kesalahan internal pada server.' });
+        console.error('API Handler Error:', error);
+        res.status(500).json({ message: 'Terjadi kesalahan internal pada server backend.' });
     }
 }
