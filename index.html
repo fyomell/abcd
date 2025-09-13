@@ -9,9 +9,12 @@
     <link rel="stylesheet" href="kuda.css">
 </head>
 <body>
-    <div id="sidebar" class="sidebar">
+    <header class="header">
+        <div class="header-title">
+            <span class="icon fas fa-server"></span>
+            Panel Creator
+        </div>
         <div class="profile">
-            <img src="https://via.placeholder.com/150" alt="Profile Picture">
             <div class="info">
                 <div class="name">Rofik</div>
                 <div class="status">
@@ -19,25 +22,11 @@
                     <span>Online</span>
                 </div>
             </div>
+            <img src="https://via.placeholder.com/150" alt="Profile Picture">
         </div>
-        <a href="#create-panel" class="menu-item active"><span class="icon fas fa-server"></span>Create Panel</a>
-    </div>
-    
-    <div id="backdrop" class="backdrop"></div>
-
-    <header class="header">
-        <div class="icon hamburger" onclick="toggleSidebar()">
-            <span class="fas fa-bars"></span>
-        </div>
-        <div class="header-title">
-            Panel Creator
-        </div>
-        <div class="icon">
-            </div>
     </header>
 
     <main class="main-content">
-        
         <div id="create-panel" class="content-section active">
             <div class="panel-creator"> 
                 <h1>Create Free Panel</h1>
@@ -46,6 +35,7 @@
                     <input type="text" id="panelUsernameInput" placeholder="Masukkan Username Panel Anda" required autocomplete="off">
                     <input type="password" id="panelPasswordInput" placeholder="Masukkan Password Panel Anda" required autocomplete="off">
                     <input type="text" id="panelServerNameInput" placeholder="Nama Server (Opsional)" autocomplete="off">
+                    
                     <select id="panelRamSelect" required>
                         <option value="" disabled selected>Pilih RAM Server</option>
                         <option value="1gb">1 GB RAM</option>
@@ -53,8 +43,14 @@
                         <option value="3gb">3 GB RAM</option>
                         <option value="4gb">4 GB RAM</option>
                         <option value="5gb">5 GB RAM</option>
+                        <option value="6gb">6 GB RAM</option>
+                        <option value="7gb">7 GB RAM</option>
+                        <option value="8gb">8 GB RAM</option>
+                        <option value="9gb">9 GB RAM</option>
+                        <option value="10gb">10 GB RAM</option>
                         <option value="unlimited">Unlimited RAM</option>
                     </select>
+
                     <button id="createPanelBtn" type="submit">Buat Panel</button>
                 </form>
                 <div id="panelResultArea" style="display: none; margin-top: 2rem; text-align: left;">
@@ -81,7 +77,6 @@
                 <div id="panelStatusMessage" class="status-message"></div>
             </div>
         </div>
-        
     </main>
     
     <script src="miyako.js" defer></script>
