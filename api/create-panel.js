@@ -1,6 +1,5 @@
-// File: /api/create-panel.js (Final Fix Startup Command)
-
-import config from '../config.js'; // Import konfigurasi dari file config.js di root
+// File: /api/create-panel.js (Sudah diperbaiki)
+import config from '../config.js';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -8,7 +7,8 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { username, password, ram: selectedRam } = req.body;
+        // --- PERUBAHAN 1: Tambah 'serverName' dari body ---
+        const { username, password, ram: selectedRam, serverName } = req.body;
 
         if (!username || !password || !selectedRam) {
             return res.status(400).json({ message: 'Username, password, dan RAM wajib diisi.' });
@@ -69,6 +69,10 @@ export default async function handler(req, res) {
 
         const userId = userData.attributes.id;
 
+        // --- PERUBAHAN 2: Tentukan nama server ---
+        // Kalo serverName diisi, pake itu. Kalo kosong, pake username.
+        const finalServerName = serverName && serverName.trim() !== '' ? serverName : username;
+
         const serverResponse = await fetch(`${domain}/api/application/servers`, {
             method: 'POST',
             headers: {
@@ -77,11 +81,12 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${apikey}`,
             },
             body: JSON.stringify({
-                name: `server-${username}`,
+                // --- PERUBAHAN 3: Gunakan nama server yang sudah ditentukan ---
+                name: finalServerName,
                 user: userId,
                 egg: parseInt(egg),
                 docker_image: "ghcr.io/parkervcp/yolks:nodejs_18",
-                startup: `if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == "1" ]]; then git pull; fi; if [[ ! -z \${NODE_PACKAGES} ]]; then /usr/local/bin/npm install \${NODE_PACKAGES}; fi; if [[ ! -z \${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall \${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ ! -z \${CUSTOM_ENVIRONMENT_VARIABLES} ]]; then vars=$(echo \${CUSTOM_ENVIRONMENT_VARIABLES} | tr ";" "\\n"); for line in $vars; do export $line; done fi; /usr/local/bin/\${CMD_RUN};`, // <-- INI YANG DIUBAH
+                startup: `if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == "1" ]]; then git pull; fi; if [[ ! -z \${NODE_PACKAGES} ]]; then /usr/local/bin/npm install \${NODE_PACKAGES}; fi; if [[ ! -z \${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall \${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; if [[ ! -z \${CUSTOM_ENVIRONMENT_VARIABLES} ]]; then vars=$(echo \${CUSTOM_ENVIRONMENT_VARIABLES} | tr ";" "\\n"); for line in $vars; do export $line; done fi; /usr/local/bin/\${CMD_RUN};`,
                 environment: {
                     "USER_UPLOAD": "0",
                     "AUTO_UPDATE": "0",
