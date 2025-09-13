@@ -1,4 +1,4 @@
-// File: /api/create-panel.js (Versi Full Fix dengan Pengecekan Error Lengkap)
+// File: /api/create-panel.js (Final Fix)
 
 import config from '../config.js'; // Import konfigurasi dari file config.js di root
 
@@ -14,14 +14,12 @@ export default async function handler(req, res) {
             return res.status(400).json({ message: 'Username, password, dan RAM wajib diisi.' });
         }
 
-        // --- AMBIL PENGATURAN LANGSUNG DARI FILE CONFIG.JS ---
         const { domain, apikey, egg, nestid, loc } = config;
 
         if (!apikey || apikey === "PTLC_xxxxxxxxxxxxxxxxxxxxxxxx") {
             return res.status(500).json({ message: 'API key belum di-setting di config.js.' });
         }
         
-        // Logika penentuan spek server
         let ram, disknya, cpu;
         switch (selectedRam) {
             case "1gb": ram = "1024"; disknya = "1024"; cpu = "40"; break;
@@ -40,9 +38,6 @@ export default async function handler(req, res) {
 
         const email = username + "@rofik.tools";
 
-        // ========================================================================
-        // LANGKAH 1: Buat User di Pterodactyl
-        // ========================================================================
         const userResponse = await fetch(`${domain}/api/application/users`, {
             method: 'POST',
             headers: {
@@ -60,7 +55,6 @@ export default async function handler(req, res) {
             })
         });
 
-        // KODE FIX: Cek response sebelum mencoba parse JSON
         if (!userResponse.ok) {
             const errorText = await userResponse.text();
             console.error("RAW ERROR DARI PANEL (SAAT BUAT USER):", errorText);
@@ -75,9 +69,6 @@ export default async function handler(req, res) {
 
         const userId = userData.attributes.id;
 
-        // ========================================================================
-        // LANGKAH 2: Buat Server untuk User tersebut
-        // ========================================================================
         const serverResponse = await fetch(`${domain}/api/application/servers`, {
             method: 'POST',
             headers: {
@@ -90,15 +81,18 @@ export default async function handler(req, res) {
                 user: userId,
                 egg: parseInt(egg),
                 docker_image: "ghcr.io/parkervcp/yolks:nodejs_18",
-                startup: "npm start",
-                environment: { "USER_UPLOAD": "0", "AUTO_UPDATE": "0" },
+                startup: "if [[ -d .git ]] && [[ {{AUTO_UPDATE}} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; /usr/local/bin/node /home/container/{{BOT_JS_FILE}}",
+                environment: {
+                    "USER_UPLOAD": "0",
+                    "AUTO_UPDATE": "0",
+                    "CMD_RUN": "npm start" // <-- INI DIA FIX-NYA
+                },
                 limits: { memory: ram, swap: 0, disk: disknya, io: 500, cpu: cpu },
                 feature_limits: { databases: 5, backups: 5, allocations: 1 },
                 deploy: { locations: [parseInt(loc)], dedicated_ip: false, port_range: [] }
             })
         });
 
-        // KODE FIX: Cek response sebelum mencoba parse JSON
         if (!serverResponse.ok) {
             const errorText = await serverResponse.text();
             console.error("RAW ERROR DARI PANEL (SAAT BUAT SERVER):", errorText);
@@ -111,7 +105,6 @@ export default async function handler(req, res) {
             return res.status(500).json({ message: `Gagal membuat server: ${serverData.errors[0].detail}` });
         }
         
-        // Jika semuanya berhasil, kirim kembali detail akun ke frontend
         res.status(200).json({
             success: true,
             username: userData.attributes.username,
