@@ -25,6 +25,11 @@ body, html {
     border-radius: 15px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6); text-align: center;
 }
 .auth-box h1 { color: var(--neon-purple); margin-top: 0; }
+.auth-box h3 {
+    margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--neon-purple);
+    border-bottom: 1px solid var(--light-card-bg); padding-bottom: 0.5rem; text-align: left;
+    font-size: 1em;
+}
 .auth-box p { color: var(--light-text); }
 .auth-box form, .auth-box .input-group { display: flex; flex-direction: column; gap: 1rem; margin: 2rem 0; }
 .auth-box input {
@@ -78,32 +83,60 @@ body, html {
 
 @media (min-width: 760px) {
     .sidebar { left: 0; }
-    .header, .main-content { margin-left: 280px; }
+    .main-content, .header { margin-left: 280px; }
     .header .hamburger { display: none; }
     .backdrop { display: none !important; }
 }
 
 /* --- Panel Creator & Owner Menu --- */
 .panel-creator, .owner-container {
-    max-width: 800px; margin: 0 auto;
+    max-width: 95%; margin: 0 auto;
     background-color: rgba(26, 26, 46, 0.8); backdrop-filter: blur(10px);
     padding: 2.5rem; border-radius: 15px; border: 2px solid var(--neon-purple);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
 }
+.panel-creator { max-width: 600px; text-align: center;}
 .panel-creator h1, .owner-container h1 { color: var(--neon-purple); text-shadow: 0 0 10px var(--neon-shadow); margin-top: 0; text-align: center; }
-.owner-section { margin-top: 2rem; }
+.owner-section { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--light-card-bg); }
+.owner-section:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+.owner-section h2 { margin-top: 0; color: var(--text-color); }
+.owner-section p { font-size: 0.9em; color: var(--light-text); }
 .table-container { overflow-x: auto; }
-#user-list-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+#user-list-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9em; }
 #user-list-table th, #user-list-table td {
     padding: 0.75rem; border: 1px solid var(--light-card-bg); text-align: left;
+    white-space: nowrap;
 }
 #user-list-table th { background-color: var(--light-card-bg); color: var(--neon-purple); }
 .status-banned { color: var(--error-color); font-weight: bold; }
 .status-active { color: var(--success-color); }
 .action-btn {
     background: none; border: 1px solid var(--text-color); color: var(--text-color);
-    padding: 0.3rem 0.6rem; border-radius: 5px; cursor: pointer; margin-right: 0.5rem;
-    transition: all 0.2s; font-size: 0.8em;
+    padding: 0.3rem 0.6rem; border-radius: 5px; cursor: pointer; margin: 0 0.2rem;
+    transition: all 0.2s; font-size: 0.9em;
 }
 .action-btn.ban:hover { background-color: var(--error-color); border-color: var(--error-color); }
 .action-btn.unban:hover { background-color: var(--success-color); border-color: var(--success-color); }
+.owner-form { display: flex; gap: 1rem; align-items: center; }
+.owner-form input {
+    flex-grow: 1; padding: 0.6rem; border-radius: 0.5rem;
+    border: 1px solid var(--neon-purple); background-color: var(--dark-bg);
+    color: var(--text-color); font-size: 1rem;
+}
+.owner-form button, .danger-btn {
+    padding: 0.6rem 1rem; border: none; background-color: var(--neon-purple);
+    color: var(--btn-text); border-radius: 0.5rem; font-weight: bold;
+    cursor: pointer; transition: all 0.3s ease; white-space: nowrap;
+}
+.danger-btn { background-color: var(--error-color); }
+.danger-btn:hover { background-color: #c62828; }
+.status-message {
+    margin-top: 1rem; padding: 1rem; border-radius: 8px;
+    background-color: rgba(157, 0, 255, 0.2); color: var(--neon-purple);
+    text-align: center;
+}
+.status-message.info { background-color: rgba(0, 200, 255, 0.2); color: #00c8ff; }
+.result-box {
+    background-color: var(--light-card-bg); padding: 1.5rem;
+    border-radius: 10px; border: 1px solid var(--neon-purple);
+}
