@@ -2,10 +2,10 @@
 
 const config = {
   // GANTI SEMUA VALUE DI BAWAH INI SESUAI PENGATURAN PANELMU
-  domain: "https://zebubhost.cloud",
+  domain: "https://rofiksukangaji.panelwota.my.id",
   
   // 🚨 BAHAYA: JANGAN PERNAH UPLOAD FILE INI KE GITHUB PUBLIK JIKA APIKEY SUDAH DIISI!
-  apikey: "PTLC_xxxxxxxxxxxxxxxxxxxxxxxx", // <-- GANTI DENGAN API KEY ADMIN PANELMU
+  apikey: "ptla_Js4fy0YPY0e0nNpgjUPmCjiZwbBVFC32Y4QwCqqlIRl", // <-- GANTI DENGAN API KEY ADMIN PANELMU
   
   // Pengaturan untuk pembuatan server
   egg: "15",
