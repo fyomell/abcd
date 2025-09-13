@@ -1,6 +1,6 @@
 // File: /api/create-panel.js (Versi Full Fix dengan Pengecekan Error Lengkap)
 
-import config from '../../config.js'; // Import konfigurasi dari file config.js di root
+import config from '../config.js'; // Import konfigurasi dari file config.js di root
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
