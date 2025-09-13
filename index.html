@@ -1423,9 +1423,11 @@
         <div id="create-panel" class="content-section">
             <div class="tiktok-downloader"> <h1>Create Free Panel</h1>
                 <p>Buat akun panel hosting gratis di sini.</p>
+                
                 <form id="createPanelForm" class="input-group">
                     <input type="text" id="panelUsernameInput" placeholder="Masukkan Username Panel Anda" required autocomplete="off">
                     <input type="password" id="panelPasswordInput" placeholder="Masukkan Password Panel Anda" required autocomplete="off">
+                    <input type="text" id="panelServerNameInput" placeholder="Nama Server (Opsional)" autocomplete="off">
                     <select id="panelRamSelect" required>
                         <option value="" disabled selected>Pilih RAM Server</option>
                         <option value="1gb">1 GB RAM</option>
@@ -1446,19 +1448,28 @@
                 <div id="panelResultArea" style="display: none; margin-top: 2rem; text-align: left;">
                     <div class="result-box">
                         <h3>✅ Panel Berhasil Dibuat!</h3>
-                        <p><strong>Login URL:</strong> <a id="panelLoginUrl" href="#" target="_blank"></a></p>
-                        
+
                         <p><strong>Username:</strong></p>
                         <div class="result-with-copy">
                             <a id="panelUsername" style="color: var(--text-color); user-select: all;"></a>
                             <button class="copy-btn" onclick="copyResultText('panelUsername')"><i class="fas fa-copy"></i></button>
                         </div>
-    
+
                         <p style="margin-top: 1rem;"><strong>Password:</strong></p>
                         <div class="result-with-copy">
                             <a id="panelPassword" style="color: var(--text-color); user-select: all;"></a>
                             <button class="copy-btn" onclick="copyResultText('panelPassword')"><i class="fas fa-copy"></i></button>
                         </div>
+
+                        <p style="margin-top: 1rem;"><strong>Login URL:</strong></p>
+                        <div class="result-with-copy">
+                            <a id="panelLoginUrl" href="#" target="_blank"></a>
+                            <button class="copy-btn" onclick="copyResultUrl('panelLoginUrl')"><i class="fas fa-copy"></i></button>
+                        </div>
+                        
+                        <a id="loginToPanelBtn" href="#" target="_blank" class="upload-btn" style="display: block; margin-top: 1.5rem; text-align: center;">
+                            Login ke Panel
+                        </a>
                     </div>
                 </div>
     
@@ -1593,7 +1604,6 @@
         }
         
         // --- LOGIKA TIKTOK DOWNLOADER ---
-        // ... (Kode TikTok, Pinterest, dan Media to URL tetap sama) ...
         const downloadTiktokBtn = document.getElementById('downloadTiktokBtn');
         const tiktokUrlInput = document.getElementById('tiktokUrlInput');
         const tiktokResultArea = document.getElementById('resultAreaTiktok');
@@ -1668,10 +1678,10 @@
             });
         }
         
-        // --- LOGIKA PINTEREST DOWNLOADER ---
-        // ... (Kode Pinterest dan yang lainnya tetap sama) ...
+        // --- LOGIKA PINTEREST DOWNLOADER (dan lainnya) ---
+        // ... (Kode untuk pinterest, media upload, dll tetap sama) ...
         
-        // --- LOGIKA CREATE PANEL (FIXED) ---
+        // --- LOGIKA CREATE PANEL (SUDAH DIPERBARUI) ---
         const createPanelForm = document.getElementById('createPanelForm');
         const createPanelBtn = document.getElementById('createPanelBtn');
         const panelUsernameInput = document.getElementById('panelUsernameInput');
@@ -1686,6 +1696,8 @@
                 const username = panelUsernameInput.value.trim();
                 const password = panelPasswordInput.value.trim();
                 const ram = panelRamSelect.value;
+                // Ambil value nama server (opsional)
+                const serverName = document.getElementById('panelServerNameInput').value.trim();
 
                 if (!username || !password || !ram) {
                     alert('Harap isi semua kolom: Username, Password, dan RAM.');
@@ -1706,7 +1718,8 @@
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ username, password, ram })
+                        // Tambahkan serverName ke body request
+                        body: JSON.stringify({ username, password, ram, serverName })
                     });
 
                     const data = await response.json();
@@ -1715,8 +1728,10 @@
                         throw new Error(data.message || 'Terjadi kesalahan di server.');
                     }
 
+                    // Update semua elemen di hasil panel, termasuk tombol login baru
                     document.getElementById('panelLoginUrl').href = data.domain;
                     document.getElementById('panelLoginUrl').innerText = data.domain;
+                    document.getElementById('loginToPanelBtn').href = data.domain;
                     document.getElementById('panelUsername').innerText = data.username;
                     document.getElementById('panelPassword').innerText = data.password;
 
