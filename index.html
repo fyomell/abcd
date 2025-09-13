@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rofik</title>
+    <title>Rofik - Create Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="kuda.css">
@@ -20,16 +20,7 @@
                 </div>
             </div>
         </div>
-        <a href="#beranda" class="menu-item active"><span class="icon fas fa-home"></span>Beranda</a>
-        <a href="#payment" class="menu-item"><span class="icon fas fa-money-bill-wave"></span>Payment</a>
-        <a href="#produk" class="menu-item"><span class="icon fas fa-shopping-cart"></span>Produk</a>
-        <a href="#sc-bot" class="menu-item"><span class="icon fas fa-code"></span>SC Bot Tele Free</a>
-        <a href="#alight-motion-preset" class="menu-item"><span class="icon fas fa-film"></span>Preset Alight Motion</a>
-        <a href="#tiktok-downloader" class="menu-item"><span class="icon fab fa-tiktok"></span>TikTok Downloader</a>
-        <a href="#pinterest-downloader" class="menu-item"><span class="icon fab fa-pinterest"></span>Pinterest Downloader</a>
-        <a href="#media-to-url" class="menu-item"><span class="icon fas fa-link"></span>Media to URL</a>
-        <a href="#create-panel" class="menu-item"><span class="icon fas fa-server"></span>Create Panel</a>
-        <a href="#history" class="menu-item"><span class="icon fas fa-history"></span>Riwayat</a>
+        <a href="#create-panel" class="menu-item active"><span class="icon fas fa-server"></span>Create Panel</a>
     </div>
     
     <div id="backdrop" class="backdrop"></div>
@@ -38,136 +29,16 @@
         <div class="icon hamburger" onclick="toggleSidebar()">
             <span class="fas fa-bars"></span>
         </div>
-        <div class="search-container">
-            <span class="search-icon fas fa-search"></span>
-            <input id="searchInput" type="text" placeholder="Cari..." />
+        <div class="header-title">
+            Panel Creator
         </div>
         <div class="icon">
-            <span class="fas fa-bell"></span>
-        </div>
+            </div>
     </header>
 
     <main class="main-content">
         
-        <div id="beranda" class="content-section active">
-            <div class="hero-section">
-                <h1 class="title-main">Selamat Datang di Rofik Tools!</h1>
-                <p>Semua kebutuhan digitalmu ada di sini.</p>
-            </div>
-            <div class="quick-access-container">
-                <a href="#alight-motion-preset" class="quick-access-card menu-trigger">
-                    <span class="icon fas fa-film"></span>
-                    <div class="card-text">
-                        <h4>Preset Alight Motion</h4>
-                        <small>Download preset keren.</small>
-                    </div>
-                </a>
-                <a href="#tiktok-downloader" class="quick-access-card menu-trigger">
-                    <span class="icon fab fa-tiktok"></span>
-                    <div class="card-text">
-                        <h4>TikTok Downloader</h4>
-                        <small>Unduh video tanpa watermark.</small>
-                    </div>
-                </a>
-                <a href="#media-to-url" class="quick-access-card menu-trigger">
-                    <span class="icon fas fa-link"></span>
-                    <div class="card-text">
-                        <h4>Media to URL</h4>
-                        <small>Upload media dan dapatkan link.</small>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <div id="payment" class="content-section">
-             <div class="hero-section">
-                <h1 class="title-main">Payment</h1>
-                <p>✨ Halaman ini akan berisi informasi tentang metode pembayaran yang tersedia.</p>
-            </div>
-        </div>
-
-        <div id="produk" class="content-section">
-             <div class="hero-section">
-                <h1 class="title-main">Produk</h1>
-                <p>✨ Halaman ini akan berisi daftar produk.</p>
-            </div>
-        </div>
-
-        <div id="sc-bot" class="content-section">
-            <div class="hero-section">
-                <h1 class="title-main">SC Bot Tele Free</h1>
-                <p>✨ Halaman ini akan berisi daftar dan deskripsi SC bot Telegram gratis.</p>
-            </div>
-        </div>
-
-        <div id="alight-motion-preset" class="content-section">
-            <div class="hero-section">
-                <h1 class="title-main">Kumpulan Preset Alight Motion</h1>
-                <p>✨ Di sini kamu bisa download preset Alight Motion favoritmu, lengkap dengan video contohnya.</p>
-            </div>
-            <div class="preset-container"></div>
-        </div>
-
-        <div id="tiktok-downloader" class="content-section">
-            <div class="tiktok-downloader">
-                <h1>TikTok Downloader</h1>
-                <p>Download video atau musik dari TikTok tanpa watermark.</p>
-                <div class="input-group">
-                    <input type="text" id="tiktokUrlInput" placeholder="Masukkan link video TikTok..." autocomplete="off">
-                    <button id="downloadTiktokBtn">Download</button>
-                </div>
-                <div id="resultAreaTiktok">
-                    <video id="tiktokVideoPlayer" controls style="width: 100%; max-width: 400px; border-radius: 10px; margin: 0 auto; display: block;"></video>
-                    <div class="video-info">
-                        <h3>Informasi Video</h3>
-                        <p><strong>Judul:</strong> <span id="videoTitle"></span></p>
-                        <p><strong>Author:</strong> <span id="videoAuthor"></span></p>
-                        <p><strong>Likes:</strong> <span id="videoLikes"></span></p>
-                        <p><strong>Views:</strong> <span id="videoViews"></span></p>
-                        <p><strong>Komentar:</strong> <span id="videoComments"></span></p>
-                    </div>
-                    <div class="download-links">
-                        <a id="btnVideoNowm" class="download-btn btn-video-nowm" href="#" download>Download Video</a>
-                        <a id="btnMusic" class="download-btn btn-music" href="#" download>Download Musik</a>
-                    </div>
-                </div>
-                <div id="tiktokStatusMessage" class="status-message"></div>
-            </div>
-        </div>
-        
-        <div id="pinterest-downloader" class="content-section">
-            <div class="pinterest-downloader">
-                <h1>Pinterest Downloader</h1>
-                <p>Download video atau gambar dari Pinterest.</p>
-                </div>
-        </div>
-
-        <div id="media-to-url" class="content-section">
-            <div class="media-uploader">
-                <h1>Media to URL</h1>
-                <p>Upload file media (video/foto) kamu dan dapatkan URL permanen.</p>
-                <form id="uploadForm" class="upload-area">
-                    <label for="mediaFile" class="custom-file-upload">
-                        <span id="fileName">Pilih File Media</span><br><small>Maksimal 200MB</small>
-                    </label>
-                    <input type="file" id="mediaFile" name="media" accept="image/*,video/*">
-                    <button type="submit" id="uploadBtn" class="upload-btn">Upload</button>
-                </form>
-                <div class="progress-bar-container"><div class="progress-bar"></div></div>
-                <div id="uploadStatusMessage" class="status-message"></div>
-                <div id="uploadResult" style="display:none;">
-                    <div class="result-box">
-                        <h3>URL Berhasil Dibuat</h3>
-                        <div class="result-with-copy">
-                            <a id="uploadedUrlResult" href="#" target="_blank"></a>
-                            <button class="copy-btn" onclick="copyResultUrl('uploadedUrlResult')"><i class="fas fa-copy"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="create-panel" class="content-section">
+        <div id="create-panel" class="content-section active">
             <div class="panel-creator"> 
                 <h1>Create Free Panel</h1>
                 <p>Buat akun panel hosting gratis di sini.</p>
@@ -178,6 +49,10 @@
                     <select id="panelRamSelect" required>
                         <option value="" disabled selected>Pilih RAM Server</option>
                         <option value="1gb">1 GB RAM</option>
+                        <option value="2gb">2 GB RAM</option>
+                        <option value="3gb">3 GB RAM</option>
+                        <option value="4gb">4 GB RAM</option>
+                        <option value="5gb">5 GB RAM</option>
                         <option value="unlimited">Unlimited RAM</option>
                     </select>
                     <button id="createPanelBtn" type="submit">Buat Panel</button>
@@ -207,12 +82,6 @@
             </div>
         </div>
         
-        <div id="history" class="content-section">
-            <h1>Riwayat</h1>
-            <p id="emptyHistoryMessage" class="empty-history">Riwayat masih kosong.</p>
-            <ul id="historyList" class="history-list"></ul>
-            <button id="clearHistoryBtn" style="display: none;">Hapus Semua Riwayat</button>
-        </div>
     </main>
     
     <script src="miyako.js" defer></script>
