@@ -2,7 +2,6 @@
 const CUSTOM_API_URL = 'https://abcd-chi-umber.vercel.app';
 
 // --- BAGIAN UNTUK MENGATUR ELEMEN-ELEMEN DI HALAMAN ---
-// Variabel global untuk elemen-elemen yang sering dipakai
 let lastTiktokVideoUrl = '';
 
 // Navigasi & Sidebar
@@ -11,13 +10,16 @@ const backdrop = document.getElementById('backdrop');
 const menuItems = document.querySelectorAll('.sidebar .menu-item');
 const searchInput = document.getElementById('searchInput');
 
-// TikTok Downloader
+// TikTok Downloader (Variabel video player dikembalikan)
 const downloadTiktokBtn = document.getElementById('downloadTiktokBtn');
 const tiktokUrlInput = document.getElementById('tiktokUrlInput');
 const tiktokResultArea = document.getElementById('resultAreaTiktok');
-const tiktokThumbnail = document.getElementById('tiktokThumbnail');
+const tiktokVideoPlayer = document.getElementById('tiktokVideoPlayer');
 const tiktokVideoTitle = document.getElementById('videoTitle');
 const tiktokVideoAuthor = document.getElementById('videoAuthor');
+const tiktokVideoLikes = document.getElementById('videoLikes');
+const tiktokVideoViews = document.getElementById('videoViews');
+const tiktokVideoComments = document.getElementById('videoComments');
 const btnVideoNowm = document.getElementById('btnVideoNowm');
 const btnMusic = document.getElementById('btnMusic');
 const tiktokStatusMessage = document.getElementById('tiktokStatusMessage');
@@ -50,13 +52,11 @@ const clearHistoryBtn = document.getElementById('clearHistoryBtn');
 
 // --- FUNGSI-FUNGSI UTAMA ---
 
-// Fungsi untuk buka/tutup sidebar
 function toggleSidebar() {
     sidebar.classList.toggle('open');
     backdrop.classList.toggle('active');
 }
 
-// Fungsi untuk menampilkan konten sesuai menu yang diklik
 function showContent(targetId) {
     document.querySelectorAll('.content-section').forEach(section => {
         section.classList.remove('active');
@@ -75,29 +75,44 @@ function showContent(targetId) {
     });
 }
 
-// Fungsi untuk memuat preset Alight Motion dari API
 async function loadPresets() {
     const presetContainer = document.querySelector('.preset-container');
     if (!presetContainer) return;
-
     presetContainer.innerHTML = '<p style="text-align: center; color: var(--neon-cyan);">Memuat preset...</p>';
     
     try {
         const response = await fetch(`${CUSTOM_API_URL}/api/presets`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const presets = await response.json();
         presetContainer.innerHTML = '';
 
         if (presets.length === 0) {
-            presetContainer.innerHTML = '<p style="text-align: center; color: var(--light-text);">Tidak ada preset.</p>';
+            presetContainer.innerHTML = '<p style="text-align: center; color: var(--light-text);">Tidak ada preset yang tersedia.</p>';
             return;
         }
 
         presets.forEach(preset => {
             const presetCard = document.createElement('div');
             presetCard.className = 'preset-card';
-            // ... (Kode preset card tetap sama)
+            const downloadButtons = [];
+            if (preset.download_url_alight) {
+                downloadButtons.push(`<a href="${preset.download_url_alight}" target="_blank" class="download-btn">Download 5MB</a>`);
+            }
+            if (preset.download_url_xml) {
+                downloadButtons.push(`<a href="${preset.download_url_xml}" target="_blank" class="download-btn">Download XML</a>`);
+            }
+            presetCard.innerHTML = `
+                <h2>${preset.title}</h2>
+                <div class="video-wrapper">
+                    <video src="${preset.video_url}" controls preload="none" poster="${preset.video_url}"></video>
+                </div>
+                <div class="download-section">
+                    <p>${preset.description}</p>
+                    ${downloadButtons.join('')}
+                </div>
+            `;
             presetContainer.appendChild(presetCard);
         });
     } catch (error) {
@@ -106,7 +121,6 @@ async function loadPresets() {
     }
 }
 
-// Fungsi untuk menyimpan data ke riwayat
 function saveToHistory(item) {
     let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
     item.id = Date.now();
@@ -116,7 +130,6 @@ function saveToHistory(item) {
     loadHistory();
 }
 
-// Fungsi untuk memuat riwayat dari localStorage
 function loadHistory() {
     const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
     historyList.innerHTML = ''; 
@@ -142,7 +155,6 @@ function loadHistory() {
     }
 }
 
-// Fungsi helper untuk menyalin teks/URL
 function copyResultUrl(elementId) {
     const el = document.getElementById(elementId);
     if (el && el.href) navigator.clipboard.writeText(el.href).then(() => alert('URL berhasil disalin!'));
@@ -153,37 +165,51 @@ function copyResultText(elementId) {
     if (el && el.innerText) navigator.clipboard.writeText(el.innerText).then(() => alert('Teks berhasil disalin!'));
 }
 
-// --- EVENT LISTENERS (PENANGAN AKSI PENGGUNA) ---
+// --- EVENT LISTENERS ---
 
-// Event listener saat halaman pertama kali dimuat
 document.addEventListener('DOMContentLoaded', () => {
     const initialHash = window.location.hash.substring(1) || 'beranda';
     showContent(initialHash);
     loadHistory();
+    if (initialHash === 'alight-motion-preset') {
+        loadPresets();
+    }
 });
 
-// Event listener untuk backdrop sidebar
 backdrop.addEventListener('click', toggleSidebar);
 
-// Event listener untuk setiap item menu di sidebar
 menuItems.forEach(item => {
     item.addEventListener('click', function(e) {
         e.preventDefault();
         const targetId = this.getAttribute('href').substring(1);
         showContent(targetId);
-        if (targetId === 'alight-motion-preset') loadPresets();
-        if (window.innerWidth <= 768) toggleSidebar();
+        if (targetId === 'alight-motion-preset') {
+            loadPresets();
+        }
+        if (window.innerWidth <= 768) {
+            toggleSidebar();
+        }
     });
 });
 
-// Event listener untuk tombol download TikTok
+document.querySelectorAll('.quick-access-card.menu-trigger').forEach(card => {
+    card.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        showContent(targetId);
+        if (targetId === 'alight-motion-preset') {
+            loadPresets();
+        }
+    });
+});
+
 if (downloadTiktokBtn) {
     downloadTiktokBtn.addEventListener('click', async () => {
         const url = tiktokUrlInput.value.trim();
         if (!url) return alert('Masukkan URL video TikTok dulu, bro.');
 
         tiktokStatusMessage.style.display = 'block';
-        tiktokStatusMessage.innerText = 'Sedang memproses, mohon tunggu...';
+        tiktokStatusMessage.innerText = 'Sedang memproses...';
         downloadTiktokBtn.disabled = true;
         tiktokResultArea.style.display = 'none';
         
@@ -198,14 +224,16 @@ if (downloadTiktokBtn) {
             const tiktokData = result.data;
             tiktokResultArea.style.display = 'flex';
             
-            // --- PERUBAHAN TIKTOK: TAMPILKAN THUMBNAIL ---
-            tiktokThumbnail.src = tiktokData.cover; 
+            const videoUrl = tiktokData.hdplay || tiktokData.play;
             
+            tiktokVideoPlayer.src = videoUrl;
+
             tiktokVideoTitle.innerText = tiktokData.title || 'Tidak ada judul';
             tiktokVideoAuthor.innerText = tiktokData.author?.nickname || 'Tidak diketahui';
+            tiktokVideoViews.innerText = (tiktokData.play_count || 0).toLocaleString('id-ID');
+            tiktokVideoLikes.innerText = (tiktokData.digg_count || 0).toLocaleString('id-ID');
+            tiktokVideoComments.innerText = (tiktokData.comment_count || 0).toLocaleString('id-ID');
             
-            // Gunakan hdplay jika ada, jika tidak pakai play biasa
-            const videoUrl = tiktokData.hdplay || tiktokData.play;
             btnVideoNowm.href = videoUrl;
             btnMusic.href = tiktokData.music;
 
@@ -224,7 +252,6 @@ if (downloadTiktokBtn) {
     });
 }
 
-// Event listener untuk form upload media
 if (uploadForm) {
     mediaFile.addEventListener('change', () => {
         fileName.textContent = mediaFile.files.length > 0 ? mediaFile.files[0].name : 'Pilih File Media';
@@ -273,8 +300,6 @@ if (uploadForm) {
     });
 }
 
-
-// Event listener untuk form create panel
 if (createPanelForm) {
     createPanelForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -318,7 +343,6 @@ if (createPanelForm) {
     });
 }
 
-// Event listener untuk tombol hapus riwayat
 if (clearHistoryBtn) {
     clearHistoryBtn.addEventListener('click', () => {
         if (confirm('Yakin mau hapus semua riwayat?')) {
