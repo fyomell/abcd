@@ -1,16 +1,13 @@
 // Ganti URL ini dengan URL Vercel project-mu jika berbeda.
 const CUSTOM_API_URL = 'https://abcd-chi-umber.vercel.app';
 
-// --- BAGIAN UNTUK MENGATUR ELEMEN-ELEMEN DI HALAMAN ---
+// --- DEKLARASI ELEMEN ---
 let lastTiktokVideoUrl = '';
-
-// Navigasi & Sidebar
 const sidebar = document.getElementById('sidebar');
 const backdrop = document.getElementById('backdrop');
 const menuItems = document.querySelectorAll('.sidebar .menu-item');
 const searchInput = document.getElementById('searchInput');
 
-// TikTok Downloader (Variabel video player dikembalikan)
 const downloadTiktokBtn = document.getElementById('downloadTiktokBtn');
 const tiktokUrlInput = document.getElementById('tiktokUrlInput');
 const tiktokResultArea = document.getElementById('resultAreaTiktok');
@@ -24,7 +21,6 @@ const btnVideoNowm = document.getElementById('btnVideoNowm');
 const btnMusic = document.getElementById('btnMusic');
 const tiktokStatusMessage = document.getElementById('tiktokStatusMessage');
 
-// Media Uploader
 const uploadForm = document.getElementById('uploadForm');
 const mediaFile = document.getElementById('mediaFile');
 const fileName = document.getElementById('fileName');
@@ -35,7 +31,6 @@ const uploadedUrlResult = document.getElementById('uploadedUrlResult');
 const progressBarContainer = document.querySelector('.media-uploader .progress-bar-container');
 const progressBar = document.querySelector('.media-uploader .progress-bar');
 
-// Create Panel
 const createPanelForm = document.getElementById('createPanelForm');
 const createPanelBtn = document.getElementById('createPanelBtn');
 const panelUsernameInput = document.getElementById('panelUsernameInput');
@@ -44,13 +39,12 @@ const panelRamSelect = document.getElementById('panelRamSelect');
 const panelResultArea = document.getElementById('panelResultArea');
 const panelStatusMessage = document.getElementById('panelStatusMessage');
 
-// Riwayat
 const HISTORY_KEY = 'rofik_history';
 const historyList = document.getElementById('historyList');
 const emptyHistoryMessage = document.getElementById('emptyHistoryMessage');
 const clearHistoryBtn = document.getElementById('clearHistoryBtn');
 
-// --- FUNGSI-FUNGSI UTAMA ---
+// --- FUNGSI-FUNGSI ---
 
 function toggleSidebar() {
     sidebar.classList.toggle('open');
@@ -178,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 backdrop.addEventListener('click', toggleSidebar);
 
-menuItems.forEach(item => {
+document.querySelectorAll('.sidebar .menu-item, .quick-access-card.menu-trigger').forEach(item => {
     item.addEventListener('click', function(e) {
         e.preventDefault();
         const targetId = this.getAttribute('href').substring(1);
@@ -192,23 +186,14 @@ menuItems.forEach(item => {
     });
 });
 
-document.querySelectorAll('.quick-access-card.menu-trigger').forEach(card => {
-    card.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href').substring(1);
-        showContent(targetId);
-        if (targetId === 'alight-motion-preset') {
-            loadPresets();
-        }
-    });
-});
-
 if (downloadTiktokBtn) {
     downloadTiktokBtn.addEventListener('click', async () => {
         const url = tiktokUrlInput.value.trim();
         if (!url) return alert('Masukkan URL video TikTok dulu, bro.');
 
         tiktokStatusMessage.style.display = 'block';
+        tiktokStatusMessage.style.backgroundColor = 'rgba(0, 255, 242, 0.2)';
+        tiktokStatusMessage.style.color = 'var(--neon-cyan)';
         tiktokStatusMessage.innerText = 'Sedang memproses...';
         downloadTiktokBtn.disabled = true;
         tiktokResultArea.style.display = 'none';
@@ -245,6 +230,8 @@ if (downloadTiktokBtn) {
 
         } catch (error) {
             console.error('Download Error:', error);
+            tiktokStatusMessage.style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
+            tiktokStatusMessage.style.color = '#f44336';
             tiktokStatusMessage.innerText = `❌ Gagal: ${error.message}`;
         } finally {
             downloadTiktokBtn.disabled = false;
@@ -288,6 +275,8 @@ if (uploadForm) {
         } catch (error) {
             console.error('Upload Error:', error);
             uploadStatusMessage.style.display = 'block';
+            uploadStatusMessage.style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
+            uploadStatusMessage.style.color = '#f44336';
             uploadStatusMessage.innerText = `❌ Gagal: ${error.message}`;
         } finally {
             uploadBtn.disabled = false;
@@ -311,6 +300,8 @@ if (createPanelForm) {
         if (!username || !password || !ram) return alert('Username, Password, dan RAM wajib diisi.');
 
         panelStatusMessage.style.display = 'block';
+        panelStatusMessage.style.backgroundColor = 'rgba(0, 255, 242, 0.2)';
+        panelStatusMessage.style.color = 'var(--neon-cyan)';
         panelStatusMessage.innerText = 'Sedang membuat panel, mohon tunggu...';
         createPanelBtn.disabled = true;
         createPanelBtn.innerText = 'Memproses...';
@@ -335,6 +326,8 @@ if (createPanelForm) {
             panelStatusMessage.style.display = 'none';
         } catch (error) {
             console.error('Panel Creation Error:', error);
+            panelStatusMessage.style.backgroundColor = 'rgba(244, 67, 54, 0.2)';
+            panelStatusMessage.style.color = '#f44336';
             panelStatusMessage.innerText = `❌ Gagal: ${error.message}`;
         } finally {
             createPanelBtn.disabled = false;
