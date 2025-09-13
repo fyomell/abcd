@@ -2,8 +2,8 @@
     --dark-bg: #0c0c1e;
     --card-bg: #1a1a2e;
     --light-card-bg: #131326;
-    --neon-cyan: #00fff2;
-    --neon-shadow: rgba(0, 255, 242, 0.6);
+    --neon-cyan: #9D00FF; /* WARNA UTAMA DIGANTI JADI UNGU */
+    --neon-shadow: rgba(157, 0, 255, 0.6); /* WARNA BAYANGAN JUGA DIGANTI */
     --text-color: #e0e0e0;
     --light-text: #aaa;
     --btn-text: #0c0c1e;
@@ -21,12 +21,11 @@ body, html {
 
 body {
     overflow-y: auto;
-    /* BACKGROUND DIGANTI PAKE GAMBAR + OVERLAY GELAP */
-    background-color: var(--dark-bg); /* Warna cadangan jika gambar gagal dimuat */
-    background-image: linear-gradient(rgba(12, 12, 30, 0.85), rgba(12, 12, 30, 0.95)), url('https://files.catbox.moe/elum62.jpg');
+    background-color: var(--dark-bg);
+    background-image: linear-gradient(rgba(12, 12, 30, 0.85), rgba(12, 12, 30, 0.95)), url('background.jpg');
     background-size: cover;
     background-position: center center;
-    background-attachment: fixed; /* Bikin background diem pas di-scroll */
+    background-attachment: fixed;
 }
 
 body::-webkit-scrollbar { width: 8px; }
@@ -40,8 +39,8 @@ body::-webkit-scrollbar-thumb {
 .header {
     position: sticky; top: 0; z-index: 50; display: flex;
     justify-content: space-between; align-items: center; padding: 1rem 2rem;
-    background-color: rgba(26, 26, 46, 0.8); /* Diberi efek transparan */
-    backdrop-filter: blur(10px); /* Efek glassmorphism */
+    background-color: rgba(26, 26, 46, 0.8);
+    backdrop-filter: blur(10px);
     border-bottom: 2px solid var(--neon-cyan);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
@@ -59,12 +58,14 @@ body::-webkit-scrollbar-thumb {
 .header .profile .info { text-align: right; }
 .header .profile .info .name { font-weight: bold; font-size: 0.9rem; }
 .header .profile .info .status {
-    color: #4caf50; font-size: 0.75rem; display: flex;
+    color: var(--light-text); font-size: 0.75rem; display: flex;
     align-items: center; justify-content: flex-end;
 }
 .header .profile .info .status .dot {
-    width: 8px; height: 8px; background-color: #4caf50;
-    border-radius: 50%; margin-left: 0.5rem; box-shadow: 0 0 5px #4caf50;
+    width: 8px; height: 8px;
+    background-color: var(--neon-cyan); /* WARNA TITIK ONLINE DISESUAIKAN */
+    border-radius: 50%; margin-left: 0.5rem; 
+    box-shadow: 0 0 5px var(--neon-shadow);
 }
 
 .main-content {
@@ -77,8 +78,8 @@ body::-webkit-scrollbar-thumb {
 
 .panel-creator {
     max-width: 600px; margin: 0 auto; 
-    background-color: rgba(26, 26, 46, 0.8); /* Diberi efek transparan */
-    backdrop-filter: blur(10px); /* Efek glassmorphism */
+    background-color: rgba(26, 26, 46, 0.8);
+    backdrop-filter: blur(10px);
     padding: 2.5rem; border-radius: 15px; border: 2px solid var(--neon-cyan);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6); text-align: center;
 }
@@ -100,7 +101,7 @@ body::-webkit-scrollbar-thumb {
 }
 .panel-creator .input-group select {
     -webkit-appearance: none; -moz-appearance: none; appearance: none;
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2300FFF2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E');
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239D00FF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E');
     background-repeat: no-repeat;
     background-position: right 1rem top 50%;
     background-size: .65rem auto; cursor: pointer;
@@ -113,7 +114,7 @@ body::-webkit-scrollbar-thumb {
     cursor: pointer; text-decoration: none; transition: all 0.3s ease;
 }
 .panel-creator .input-group button:hover,
-.upload-btn:hover { background-color: #00b8d4; box-shadow: 0 0 15px var(--neon-shadow); }
+.upload-btn:hover { background-color: #8A2BE2; box-shadow: 0 0 15px var(--neon-shadow); }
 .result-with-copy {
     display: flex; align-items: center; gap: 0.5rem;
     margin-top: 0.5rem;
@@ -129,18 +130,15 @@ body::-webkit-scrollbar-thumb {
 }
 .status-message {
     margin-top: 1rem; padding: 1rem; border-radius: 8px;
-    background-color: rgba(0, 255, 242, 0.2); color: var(--neon-cyan);
+    background-color: rgba(157, 0, 255, 0.2); color: var(--neon-cyan);
     text-align: center; display: none;
 }
 .result-box {
     background-color: var(--light-card-bg); padding: 1.5rem;
     border-radius: 10px; border: 1px solid var(--neon-cyan);
 }
-
-/* STYLE BARU UNTUK INFO TANGGAL */
 .date-info {
-    font-size: 0.9em;
-    margin: 0.5rem 0;
+    font-size: 0.9em; margin: 0.5rem 0;
     padding-bottom: 0.5rem;
     border-bottom: 1px dashed var(--card-bg);
 }
@@ -149,9 +147,7 @@ body::-webkit-scrollbar-thumb {
     border-bottom: none;
     padding-bottom: 1rem; 
 }
-.date-info span {
-    color: var(--text-color);
-}
+.date-info span { color: var(--text-color); }
 .date-info.expires span {
     color: var(--neon-cyan);
     font-weight: bold;
