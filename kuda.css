@@ -25,13 +25,8 @@ body, html {
     border-radius: 15px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6); text-align: center;
 }
 .auth-box h1 { color: var(--neon-purple); margin-top: 0; }
-.auth-box h3 {
-    margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--neon-purple);
-    border-bottom: 1px solid var(--light-card-bg); padding-bottom: 0.5rem; text-align: left;
-    font-size: 1em;
-}
 .auth-box p { color: var(--light-text); }
-.auth-box form, .auth-box .input-group { display: flex; flex-direction: column; gap: 1rem; margin: 2rem 0; }
+.auth-box form { display: flex; flex-direction: column; gap: 1rem; margin: 2rem 0; }
 .auth-box input {
     padding: 0.8rem; border-radius: 0.5rem; border: 1px solid var(--neon-purple);
     background-color: var(--dark-bg); color: var(--text-color); font-size: 1rem;
@@ -118,7 +113,7 @@ body, html {
 .action-btn.ban:hover { background-color: var(--error-color); border-color: var(--error-color); }
 .action-btn.unban:hover { background-color: var(--success-color); border-color: var(--success-color); }
 .owner-form { display: flex; gap: 1rem; align-items: center; }
-.owner-form input {
+.owner-form input, .owner-form select {
     flex-grow: 1; padding: 0.6rem; border-radius: 0.5rem;
     border: 1px solid var(--neon-purple); background-color: var(--dark-bg);
     color: var(--text-color); font-size: 1rem;
