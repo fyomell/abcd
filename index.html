@@ -37,13 +37,38 @@
                 <div class="panel-creator">
                     <h1>Create Your Panel</h1>
                     <p id="panel-creator-subtitle">Anda dapat membuat 1 server gratis.</p>
-                    <form id="createPanelForm" class="input-group">
-                        <input type="text" id="panelServerNameInput" placeholder="Nama Server (Opsional)" autocomplete="off">
-                        <select id="panelRamSelect" required>
-                            </select>
-                        <button id="createPanelBtn" type="submit">Buat Panel</button>
-                    </form>
-                    <div id="panelResultArea" class="hidden"></div>
+                    <div id="panel-form-container">
+                        <form id="createPanelForm" class="input-group">
+                            <input type="text" id="panelServerNameInput" placeholder="Nama Server (Opsional)" autocomplete="off">
+                            <select id="panelRamSelect" required>
+                                </select>
+                            <button id="createPanelBtn" type="submit">Buat Panel</button>
+                        </form>
+                    </div>
+                    <div id="panelResultArea" class="hidden">
+                         <div class="result-box">
+                            <h3>✅ Panel Berhasil Dibuat!</h3>
+                            <p class="date-info"><strong>Dibuat Pada:</strong> <span id="creationDate"></span></p>
+                            <p class="date-info expires"><strong>Kedaluwarsa Pada:</strong> <span id="expirationDate"></span></p>
+                            <p><strong>Username:</strong></p>
+                            <div class="result-with-copy">
+                                <a id="panelUsername" style="user-select: all;"></a>
+                                <button class="copy-btn" onclick="copyResultText('panelUsername')"><i class="fas fa-copy"></i></button>
+                            </div>
+                            <p style="margin-top: 1rem;"><strong>Password:</strong></p>
+                            <div class="result-with-copy">
+                                <a id="panelPassword" style="user-select: all;"></a>
+                                <button class="copy-btn" onclick="copyResultText('panelPassword')"><i class="fas fa-copy"></i></button>
+                            </div>
+                            <p style="margin-top: 1rem;"><strong>Login URL:</strong></p>
+                            <div class="result-with-copy">
+                                <a id="panelLoginUrl" href="#" target="_blank"></a>
+                                <button class="copy-btn" onclick="copyResultUrl('panelLoginUrl')"><i class="fas fa-copy"></i></button>
+                            </div>
+                            <a id="loginToPanelBtn" href="#" target="_blank" class="upload-btn" style="display: block; margin-top: 1.5rem; text-align: center;">Login ke Panel</a>
+                        </div>
+                    </div>
+                    <div id="userHasPanelMessage" class="status-message info hidden"></div>
                     <div id="panelStatusMessage" class="status-message"></div>
                 </div>
             </div>
@@ -51,6 +76,7 @@
             <div id="owner-view" class="view hidden">
                 <div class="owner-container">
                     <h1><i class="fas fa-tools"></i> Owner Menu</h1>
+                    
                     <div class="owner-section">
                         <h2><i class="fas fa-users"></i> List All Users</h2>
                         <div class="table-container">
@@ -60,6 +86,8 @@
                                         <th>Username</th>
                                         <th>Role</th>
                                         <th>Status</th>
+                                        <th>Ptero ID</th>
+                                        <th>Server ID</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -67,6 +95,28 @@
                                     </tbody>
                             </table>
                         </div>
+                    </div>
+
+                    <div class="owner-section">
+                        <h2><i class="fas fa-user-plus"></i> Create Premium User</h2>
+                        <form id="premium-form" class="owner-form">
+                            <input type="text" id="premium-username" placeholder="Username yang mau di-premiumkan">
+                            <button type="submit">Jadikan Premium</button>
+                        </form>
+                    </div>
+
+                    <div class="owner-section">
+                        <h2><i class="fas fa-trash-alt"></i> Delete Server & User</h2>
+                        <form id="delete-form" class="owner-form">
+                            <input type="text" id="delete-server-id" placeholder="Masukkan Server ID">
+                            <button type="submit">Delete Server + User</button>
+                        </form>
+                    </div>
+
+                    <div class="owner-section">
+                        <h2><i class="fas fa-bomb"></i> Clear All Servers</h2>
+                        <p>Hapus semua server kecuali milik owner. Aksi ini tidak bisa diurungkan!</p>
+                        <button id="clear-servers-btn" class="danger-btn">Clear All Servers</button>
                     </div>
                 </div>
             </div>
@@ -100,16 +150,20 @@
         </div>
     </div>
 
-    <div id="github-modal" class="auth-container hidden">
+    <div id="config-modal" class="auth-container hidden">
          <div class="auth-box">
-            <h1>Koneksi ke GitHub</h1>
+            <h1>Konfigurasi Awal</h1>
             <p>Info ini hanya disimpan di browser Anda.</p>
             <div class="input-group">
-                <input type="password" id="token" placeholder="Personal Access Token (PAT)">
-                <input type="text" id="owner" placeholder="Owner / Username Repo">
-                <input type="text" id="repo" placeholder="Nama Repository">
+                <h3>GitHub (Untuk Database User)</h3>
+                <input type="password" id="token" placeholder="GitHub Personal Access Token (PAT)">
+                <input type="text" id="owner" placeholder="Owner / Username Repo GitHub">
+                <input type="text" id="repo" placeholder="Nama Repository GitHub">
+                <h3>Pterodactyl (Untuk Aksi Panel)</h3>
+                <input type="text" id="ptero-domain" placeholder="Contoh: https://panel.domain.com">
+                <input type="password" id="ptero-apikey" placeholder="Pterodactyl Admin API Key">
             </div>
-            <button id="save-github-config">Simpan & Lanjutkan</button>
+            <button id="save-config">Simpan & Lanjutkan</button>
         </div>
     </div>
     
